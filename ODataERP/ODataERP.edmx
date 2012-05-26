@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ODataERPModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ODataERPModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="ODataERPModel.Store.Customer" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="ODataERPModel.Store.Product" store:Type="Tables" />
+          <EntitySet Name="ProductForSalesOrder" EntityType="ODataERPModel.Store.ProductForSalesOrder" store:Type="Tables" />
+          <EntitySet Name="SalesOrder" EntityType="ODataERPModel.Store.SalesOrder" store:Type="Tables" />
+          <AssociationSet Name="ProductForSalesOrder_Product" Association="ODataERPModel.Store.ProductForSalesOrder_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductForSalesOrder" EntitySet="ProductForSalesOrder" />
+          </AssociationSet>
+          <AssociationSet Name="SalesOrder_Customer" Association="ODataERPModel.Store.SalesOrder_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="SalesOrder" EntitySet="SalesOrder" />
+          </AssociationSet>
+          <AssociationSet Name="SalesOrder_ProductForSalesOrders" Association="ODataERPModel.Store.SalesOrder_ProductForSalesOrders">
+            <End Role="SalesOrder" EntitySet="SalesOrder" />
+            <End Role="ProductForSalesOrder" EntitySet="ProductForSalesOrder" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" />
+          <Property Name="Address" Type="nvarchar" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" />
+          <Property Name="Price" Type="numeric" Nullable="false" Scale="2" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductForSalesOrder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="SalesOrderID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalesOrder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DeliveryDate" Type="datetime" Nullable="false" />
+          <Property Name="PaymentTerms" Type="int" Nullable="false" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="ProductForSalesOrder_Product">
+          <End Role="Product" Type="ODataERPModel.Store.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductForSalesOrder" Type="ODataERPModel.Store.ProductForSalesOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductForSalesOrder">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SalesOrder_Customer">
+          <End Role="Customer" Type="ODataERPModel.Store.Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SalesOrder" Type="ODataERPModel.Store.SalesOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SalesOrder">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SalesOrder_ProductForSalesOrders">
+          <End Role="SalesOrder" Type="ODataERPModel.Store.SalesOrder" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductForSalesOrder" Type="ODataERPModel.Store.ProductForSalesOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductForSalesOrder">
+              <PropertyRef Name="SalesOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ODataERPModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ODataERPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customer" EntityType="ODataERPModel.Customer" />
+          <EntitySet Name="Product" EntityType="ODataERPModel.Product" />
+          <EntitySet Name="ProductForSalesOrder" EntityType="ODataERPModel.ProductForSalesOrder" />
+          <EntitySet Name="SalesOrder" EntityType="ODataERPModel.SalesOrder" />
+          <AssociationSet Name="SalesOrder_Customer" Association="ODataERPModel.SalesOrder_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="SalesOrder" EntitySet="SalesOrder" />
+          </AssociationSet>
+          <AssociationSet Name="ProductForSalesOrder_Product" Association="ODataERPModel.ProductForSalesOrder_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="ProductForSalesOrder" EntitySet="ProductForSalesOrder" />
+          </AssociationSet>
+          <AssociationSet Name="SalesOrder_ProductForSalesOrders" Association="ODataERPModel.SalesOrder_ProductForSalesOrders">
+            <End Role="SalesOrder" EntitySet="SalesOrder" />
+            <End Role="ProductForSalesOrder" EntitySet="ProductForSalesOrder" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="SalesOrder" Relationship="ODataERPModel.SalesOrder_Customer" FromRole="Customer" ToRole="SalesOrder" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductForSalesOrder" Relationship="ODataERPModel.ProductForSalesOrder_Product" FromRole="Product" ToRole="ProductForSalesOrder" />
+        </EntityType>
+        <EntityType Name="ProductForSalesOrder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="SalesOrderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="ODataERPModel.ProductForSalesOrder_Product" FromRole="ProductForSalesOrder" ToRole="Product" />
+          <NavigationProperty Name="SalesOrder" Relationship="ODataERPModel.SalesOrder_ProductForSalesOrders" FromRole="ProductForSalesOrder" ToRole="SalesOrder" />
+        </EntityType>
+        <EntityType Name="SalesOrder">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeliveryDate" Type="DateTime" Nullable="false" />
+          <Property Name="PaymentTerms" Type="Int32" Nullable="false" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="ODataERPModel.SalesOrder_Customer" FromRole="SalesOrder" ToRole="Customer" />
+          <NavigationProperty Name="ProductForSalesOrder" Relationship="ODataERPModel.SalesOrder_ProductForSalesOrders" FromRole="SalesOrder" ToRole="ProductForSalesOrder" />
+        </EntityType>
+        <Association Name="SalesOrder_Customer">
+          <End Role="Customer" Type="ODataERPModel.Customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SalesOrder" Type="ODataERPModel.SalesOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SalesOrder">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ProductForSalesOrder_Product">
+          <End Role="Product" Type="ODataERPModel.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductForSalesOrder" Type="ODataERPModel.ProductForSalesOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductForSalesOrder">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SalesOrder_ProductForSalesOrders">
+          <End Role="SalesOrder" Type="ODataERPModel.SalesOrder" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductForSalesOrder" Type="ODataERPModel.ProductForSalesOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductForSalesOrder">
+              <PropertyRef Name="SalesOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ODataERPModelStoreContainer" CdmEntityContainer="ODataERPEntities">
+          <EntitySetMapping Name="Customer"><EntityTypeMapping TypeName="ODataERPModel.Customer"><MappingFragment StoreEntitySet="Customer">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Address" ColumnName="Address" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Product"><EntityTypeMapping TypeName="ODataERPModel.Product"><MappingFragment StoreEntitySet="Product">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Price" ColumnName="Price" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProductForSalesOrder"><EntityTypeMapping TypeName="ODataERPModel.ProductForSalesOrder"><MappingFragment StoreEntitySet="ProductForSalesOrder">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+            <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+            <ScalarProperty Name="SalesOrderID" ColumnName="SalesOrderID" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SalesOrder"><EntityTypeMapping TypeName="ODataERPModel.SalesOrder"><MappingFragment StoreEntitySet="SalesOrder">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+            <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+            <ScalarProperty Name="Priority" ColumnName="Priority" />
+            <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="ODataERP">
+        <EntityTypeShape EntityType="ODataERPModel.Customer" Width="1.5" PointX="0.75" PointY="1.25" Height="1.7879850260416668" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.Product" Width="1.5" PointX="3" PointY="5.125" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.ProductForSalesOrder" Width="1.5" PointX="5.25" PointY="1" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.SalesOrder" Width="1.5" PointX="3" PointY="1" Height="2.3648893229166656" IsExpanded="true" />
+        <AssociationConnector Association="ODataERPModel.SalesOrder_Customer" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.1439925130208333" />
+          <ConnectorPoint PointX="3" PointY="2.1439925130208333" />
+        </AssociationConnector>
+        <AssociationConnector Association="ODataERPModel.ProductForSalesOrder_Product" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="6.1151432291666667" />
+          <ConnectorPoint PointX="6" PointY="6.1151432291666667" />
+          <ConnectorPoint PointX="6" PointY="3.1725878906249996" />
+        </AssociationConnector>
+        <AssociationConnector Association="ODataERPModel.SalesOrder_ProductForSalesOrders" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="2.0862939453125" />
+          <ConnectorPoint PointX="5.25" PointY="2.0862939453125" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ODataERPModelStoreContainer" CdmEntityContainer="ODataERPEntities">
+    <EntitySetMapping Name="Customer">
+      <EntityTypeMapping TypeName="ODataERPModel.Customer">
+        <MappingFragment StoreEntitySet="Customer">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Product">
+      <EntityTypeMapping TypeName="ODataERPModel.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductForSalesOrder">
+      <EntityTypeMapping TypeName="ODataERPModel.ProductForSalesOrder">
+        <MappingFragment StoreEntitySet="ProductForSalesOrder">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="SalesOrderID" ColumnName="SalesOrderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SalesOrder">
+      <EntityTypeMapping TypeName="ODataERPModel.SalesOrder">
+        <MappingFragment StoreEntitySet="SalesOrder">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+          <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+          <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
