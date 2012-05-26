@@ -1,0 +1,7 @@
+c:\users\stefan george\documents\visual studio 2010\Projects\ODataERP\ODataERP\bin\ODataERP.dll
+c:\users\stefan george\documents\visual studio 2010\Projects\ODataERP\ODataERP\bin\ODataERP.pdb
+c:\users\stefan george\documents\visual studio 2010\Projects\ODataERP\ODataERP\bin\EntityFramework.dll
+c:\users\stefan george\documents\visual studio 2010\Projects\ODataERP\ODataERP\bin\EntityFramework.xml
+c:\users\stefan george\documents\visual studio 2010\Projects\ODataERP\ODataERP\obj\Debug\ResolveAssemblyReference.cache
+c:\users\stefan george\documents\visual studio 2010\Projects\ODataERP\ODataERP\obj\Debug\ODataERP.dll
+c:\users\stefan george\documents\visual studio 2010\Projects\ODataERP\ODataERP\obj\Debug\ODataERP.pdb

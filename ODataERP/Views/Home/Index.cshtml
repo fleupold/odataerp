@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "ODataERP";
+}
+
+<div class="tabs">
+    <ul>
+        <li><a href="#create-sales-order">Create Sales Order</a></li>
+        <li><a href="#release-goods">Release Goods</a></li>
+        <li><a href="#post-goods-issue">Post Goods Issue</a></li>
+        <li><a href="#post-customer-invoice">Post Customer Invoice</a></li>
+        <li><a href="#dun-customer">Dun Customer</a></li>
+    </ul>
+    <div id="create-sales-order">
+        <h2>Create Sales Order</h2>
+        <h3>General</h3>
+        <table>
+            <tr>
+                <td>
+                    Customer name:
+                </td>
+                <td>
+                    <input id="customer-name" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Priority:
+                </td>
+                <td>
+                    <select id="priority-selection">
+                        <option value="normal" selected="selected">normal</option>
+                        <option value="high">high</option>
+                        <option value="low">low</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <h3>Items</h3>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Price</th>
+            </tr>
+            <tr>
+                <td>1.</td>
+                <td><input id="order-item-name" /></td>
+                <td>
+                    <select id="order-item-quantity" />
+                        <option value="1" selected="selected">1</option>
+                    </select>
+                </td>
+                <td>
+                    <span id="order-item-unit"></span>
+                </td>
+                <td>
+                    <span id="order-item-price">0,00</span> &euro;
+                </td>
+                <td>
+                    <button id="order-add-item"></button>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>Total Net Value</td>
+                <td><span id="order-net">0,00</span> &euro;</td>
+            </tr>
+            <tr>
+                <td>Discount</td>
+                <td><input type="text" id="order-discount" />&#37;</td>
+            </tr>
+            <tr>
+                <td>Shipping</td>
+                <td><input type="text" id="order-shipping" />&euro;</td>
+            </tr>
+            <tr>
+                <td>Tax</td>
+                <td><span id="order-tax">0,00</span> &euro;</td>
+            </tr>
+            <tr>
+                <td>Total</td>
+                <td><span id="order-total">0,00</span> &euro;</td>
+            </tr>
+        </table>
+        <h3>Payment</h3>
+        <table>
+            <tr>
+                <td>Payment Terms</td>
+                <td>
+                    <select id="order-payment-terms" />
+                        <option value="14" selected="selected">14 days net</option>
+                        <option value="30">30 days net</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <h3>Delivery</h3>
+        <table>
+            <tr>
+                <td>Requested Delivery Date</td>
+                <td>
+                    <input type="text" id="order-delivery-date" />
+                </td>
+            </tr>
+            <tr>
+                <td>ATP Check</td>
+                <td>
+                    <button id="order-atp-check"></button>
+                </td>
+            </tr>
+        </table>
+        <button id="order-create"></button>
+    </div>
+    <div id="release-goods">
+        <h2>Release Goods</h2>
+    </div>
+    <div id="post-goods-issue">
+       <h2>Post Goods Issues</h2>
+    </div>
+    <div id="post-customer-invoice">
+       <h2>Post Customer Invoice</h2>
+    </div>
+    <div id="dun-customer">
+       <h2>Dun Customer</h2>
+    </div>
+</div>
