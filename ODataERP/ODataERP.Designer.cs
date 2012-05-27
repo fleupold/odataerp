@@ -322,13 +322,13 @@ namespace ODataERP
         /// </summary>
         /// <param name="id">Anfangswert der Eigenschaft ID.</param>
         /// <param name="price">Anfangswert der Eigenschaft Price.</param>
-        /// <param name="quantity">Anfangswert der Eigenschaft Quantity.</param>
-        public static Product CreateProduct(global::System.Int32 id, global::System.Decimal price, global::System.Int32 quantity)
+        /// <param name="stock">Anfangswert der Eigenschaft Stock.</param>
+        public static Product CreateProduct(global::System.Int32 id, global::System.Decimal price, global::System.Int32 stock)
         {
             Product product = new Product();
             product.ID = id;
             product.Price = price;
-            product.Quantity = quantity;
+            product.Stock = stock;
             return product;
         }
 
@@ -415,24 +415,24 @@ namespace ODataERP
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 Quantity
+        public global::System.Int32 Stock
         {
             get
             {
-                return _Quantity;
+                return _Stock;
             }
             set
             {
-                OnQuantityChanging(value);
-                ReportPropertyChanging("Quantity");
-                _Quantity = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Quantity");
-                OnQuantityChanged();
+                OnStockChanging(value);
+                ReportPropertyChanging("Stock");
+                _Stock = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Stock");
+                OnStockChanged();
             }
         }
-        private global::System.Int32 _Quantity;
-        partial void OnQuantityChanging(global::System.Int32 value);
-        partial void OnQuantityChanged();
+        private global::System.Int32 _Stock;
+        partial void OnStockChanging(global::System.Int32 value);
+        partial void OnStockChanged();
 
         #endregion
     

@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "ODataERP";
 }
-
+<div id="dialog"></div>
 <div class="tabs">
     <ul>
         <li><a href="#create-sales-order">Create Sales Order</a></li>
@@ -28,9 +28,9 @@
                 </td>
                 <td>
                     <select id="priority-selection">
-                        <option value="normal" selected="selected">normal</option>
-                        <option value="high">high</option>
-                        <option value="low">low</option>
+                        <option value="1" selected="selected">normal</option>
+                        <option value="2">high</option>
+                        <option value="0">low</option>
                     </select>
                 </td>
             </tr>
@@ -41,19 +41,13 @@
                 <th>#</th>
                 <th>Product</th>
                 <th>Quantity</th>
-                <th>Unit</th>
                 <th>Price</th>
             </tr>
-            <tr>
-                <td>1.</td>
+            <tr id="order-item-new">
+                <td id="order-item-num">1.</td>
                 <td><input id="order-item-name" /></td>
                 <td>
-                    <select id="order-item-quantity" />
-                        <option value="1" selected="selected">1</option>
-                    </select>
-                </td>
-                <td>
-                    <span id="order-item-unit"></span>
+                    <select id="order-item-quantity"></select>
                 </td>
                 <td>
                     <span id="order-item-price">0,00</span> &euro;
@@ -70,11 +64,22 @@
             </tr>
             <tr>
                 <td>Discount</td>
-                <td><input type="text" id="order-discount" />&#37;</td>
+                <td>
+                    <select id="order-discount" />
+                        <option value="0" selected="selected">0 &#37;</option>
+                        <option value="1">1 &#37;</option>
+                        <option value="2">2 &#37;</option>
+                        <option value="3">3 &#37;</option>
+                        <option value="4">4 &#37;</option>
+                        <option value="5">5 &#37;</option>
+                        <option value="10">10 &#37;</option>
+                        <option value="20">20 &#37;</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td>Shipping</td>
-                <td><input type="text" id="order-shipping" />&euro;</td>
+                <td><input type="text" id="order-shipping" value="0,00" />&euro;</td>
             </tr>
             <tr>
                 <td>Tax</td>
