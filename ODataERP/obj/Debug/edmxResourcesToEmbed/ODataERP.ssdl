@@ -2,9 +2,14 @@
 <Schema Namespace="ODataERPModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
   <EntityContainer Name="ODataERPModelStoreContainer">
     <EntitySet Name="Customer" EntityType="ODataERPModel.Store.Customer" store:Type="Tables" />
+    <EntitySet Name="Invoice" EntityType="ODataERPModel.Store.Invoice" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="ODataERPModel.Store.Product" store:Type="Tables" />
     <EntitySet Name="ProductForSalesOrder" EntityType="ODataERPModel.Store.ProductForSalesOrder" store:Type="Tables" />
     <EntitySet Name="SalesOrder" EntityType="ODataERPModel.Store.SalesOrder" store:Type="Tables" />
+    <AssociationSet Name="Invoice_SalesOrder" Association="ODataERPModel.Store.Invoice_SalesOrder">
+      <End Role="SalesOrder" EntitySet="SalesOrder" />
+      <End Role="Invoice" EntitySet="Invoice" />
+    </AssociationSet>
     <AssociationSet Name="ProductForSalesOrder_Product" Association="ODataERPModel.Store.ProductForSalesOrder_Product">
       <End Role="Product" EntitySet="Product" />
       <End Role="ProductForSalesOrder" EntitySet="ProductForSalesOrder" />
@@ -23,8 +28,23 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Discount" Type="int" Nullable="false" />
     <Property Name="Name" Type="nvarchar" />
-    <Property Name="Address" Type="nvarchar" />
+    <Property Name="Country" Type="nvarchar" />
+    <Property Name="State" Type="nvarchar" />
+    <Property Name="City" Type="nvarchar" />
+    <Property Name="Zip" Type="nvarchar" />
+    <Property Name="Street" Type="nvarchar" />
+    <Property Name="Phone" Type="nvarchar" />
+  </EntityType>
+  <EntityType Name="Invoice">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="AmountPaid" Type="numeric" Nullable="false" Scale="2" />
+    <Property Name="SalesOrderID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Product">
     <Key>
@@ -52,8 +72,28 @@
     <Property Name="DeliveryDate" Type="datetime" Nullable="false" />
     <Property Name="PaymentTerms" Type="int" Nullable="false" />
     <Property Name="Priority" Type="int" Nullable="false" />
+    <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="NetValue" Type="float" Nullable="false" />
+    <Property Name="Discount" Type="float" Nullable="false" />
+    <Property Name="Shipping" Type="float" Nullable="false" />
+    <Property Name="Tax" Type="float" Nullable="false" />
+    <Property Name="Total" Type="float" Nullable="false" />
   </EntityType>
+  <Association Name="Invoice_SalesOrder">
+    <End Role="SalesOrder" Type="ODataERPModel.Store.SalesOrder" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Invoice" Type="ODataERPModel.Store.Invoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalesOrder">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Invoice">
+        <PropertyRef Name="SalesOrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="ProductForSalesOrder_Product">
     <End Role="Product" Type="ODataERPModel.Store.Product" Multiplicity="1">
       <OnDelete Action="Cascade" />

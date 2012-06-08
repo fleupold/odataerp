@@ -1,6 +1,13 @@
 // init elements
 $(function () {
+    // sales order values
     var tax_prc = 0.19;
+    var total_net = null;
+    var discount = null;
+    var shipping = null;
+    var tax = null;
+    var total = null;
+
     so = {
         customer: null,
         new_product: null,
@@ -9,7 +16,14 @@ $(function () {
     }
 
     // tabs
-    $(".tabs").tabs();
+    $(".tabs").tabs({
+        select: function (event, ui) {
+            if (ui.index == 1) {
+                // release goods
+                reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+            }
+        }
+    });
 
     // buttons
     $("button").button();
@@ -32,6 +46,24 @@ $(function () {
         },
         label: "Add"
     });
+    $("#show-add-customer").button({
+        icons: {
+            primary: "ui-icon-plus"
+        },
+        label: "New"
+    });
+    $("#add-customer").button({
+        icons: {
+            primary: "ui-icon-plus"
+        },
+        label: "Add"
+    });
+    $("#release-goods-button").button({
+        icons: {
+            primary: "ui-icon-arrowreturnthick-1-e"
+        },
+        label: "Release"
+    });
 
     // oder delivery datepicker
     $("#order-delivery-date").datepicker({
@@ -49,7 +81,7 @@ $(function () {
               function (data) {
                   response($.map(data.results, function (item) {
                       return {
-                          label: item.Name + ", " + item.Address,
+                          label: item.Name + ", " + item.City,
                           value: item.Name,
                           attributes: item
                       }
@@ -60,6 +92,7 @@ $(function () {
         minLength: 1,
         select: function (event, ui) {
             so.customer = ui.item.attributes.ID;
+            $('#order-discount option').eq(ui.item.attributes.Discount).attr('selected', 'selected');
         }
     });
 
@@ -122,17 +155,17 @@ $(function () {
         $("#order-item-num").html(($(".item-row").length + 1) + ".");
 
         // total net
-        var total_net = 0;
+        total_net = 0;
         for (var i = 0; i < so.products.length; i++) {
             total_net += so.products[i].product.Price * so.products[i].quantity;
         }
         $("#order-net").html(String((total_net).toFixed(2)).replace(".", ","))
 
         // discount
-        var discount = 1 - 0.01 * parseInt($("#order-discount").val());
+        discount = 1 - 0.01 * parseInt($("#order-discount").val());
 
         // shipping
-        var shipping = parseFloat($("#order-shipping").val().replace(",", "."));
+        shipping = parseFloat($("#order-shipping").val().replace(",", "."));
         if (isNaN(shipping)) {
             shipping = 0;
             var message = "Enter a valid value!";
@@ -140,11 +173,11 @@ $(function () {
         }
 
         // tax
-        var tax = total_net * discount * tax_prc;
+        tax = total_net * discount * tax_prc;
         $("#order-tax").html(String((tax).toFixed(2)).replace(".", ","))
 
         // total
-        var total = total_net * discount + shipping + tax;
+        total = total_net * discount + shipping + tax;
         $("#order-total").html(String((total).toFixed(2)).replace(".", ","))
 
     }
@@ -192,7 +225,6 @@ $(function () {
 
     // create sales order
     $("#order-create").click(function () {
-        console.log("ckucj")
         var error = null;
         if (!so.customer)
             error = "You have to select a customer!";
@@ -202,42 +234,46 @@ $(function () {
             error = "You have to select a delivery date!";
 
         if (error) {
-            showDialog(error, error);
+            showDialog("Error", error);
         }
         else {
-            var requestData = { __batchRequests: [{ __changeRequests: 
+            var requestData = { __batchRequests: [{ __changeRequests:
                     [
-                        { requestUri: "SalesOrder", method: "POST", headers: { "Content-ID": "1" }, data: {
+                        { requestUri: "SalesOrder", method: "POST", headers: { "Content-ID": "1" },
+                            data: {
                                 CustomerID: so.customer,
                                 DeliveryDate: $("#order-delivery-date").datepicker("getDate"),
                                 PaymentTerms: parseInt($("#order-payment-terms").val()),
-                                Priority: parseInt($("#priority-selection").val())
+                                Priority: parseInt($("#priority-selection").val()),
+                                Status: 0,
+                                NetValue: total_net,
+                                Discount: discount,
+                                Shipping: shipping,
+                                Tax: tax,
+                                Total: total
                             }
                         }
                     ]
-                    }]
-                };
-            
-            for (var i=0; i< so.products.length; i++) {
-                var requestObject = { 
-                            requestUri: "ProductForSalesOrder", method: "POST", data: {
-                                Quantity: so.products[i].quantity,
-                                ProductID: so.products[i].product.ID,
-                                SalesOrderID: { __metadata: { uri: "$1"} }.ID
-                            }
-                        };
-                        requestData.__batchRequests[0].__changeRequests.push(requestObject)
-            }
-            
-            console.log(requestData)
+            }]
+            };
 
-            OData.request({ 
+            for (var i = 0; i < so.products.length; i++) {
+                var requestObject = {
+                    requestUri: "ProductForSalesOrder", method: "POST", data: {
+                        Quantity: so.products[i].quantity,
+                        ProductID: so.products[i].product.ID,
+                        SalesOrderID: { __metadata: { uri: "$1"}}.ID
+                    }
+                };
+                requestData.__batchRequests[0].__changeRequests.push(requestObject)
+            }
+
+            OData.request({
                 requestUri: document.location.href + "ODataERP.svc/$batch",
                 method: "POST",
                 data: requestData
-                },
+            },
                 function (data) {
-                    console.log(data)
                     showDialog("Sales order created", "Your sales order was successfully created!", function () { window.location.reload() });
                 },
                 function (err) {
@@ -246,5 +282,119 @@ $(function () {
                 OData.batchHandler
             );
         }
+    });
+
+    // add new customer
+    $("#show-add-customer").click(function () {
+        $("#create-new-customer").slideDown();
+    });
+    $("#add-customer").click(function () {
+        var error = null;
+        if (!$("#new-customer-name").val())
+            error = "You have to enter a customer name!";
+        else if (!$("#new-customer-city").val())
+            error = "You have to enter a customer city!";
+        if (error) {
+            showDialog("Error", error);
+        }
+        else {
+            OData.request(
+              { requestUri: document.location.href + "ODataERP.svc/Customer",
+                  method: "POST",
+                  data: {
+                      Name: $("#new-customer-name").val(),
+                      City: $("#new-customer-city").val(),
+                      Discount: parseInt($("#new-customer-discount").val()),
+                      Country: $("#new-customer-country").val(),
+                      State: $("#new-customer-state").val(),
+                      Zip: $("#new-customer-zip").val(),
+                      Street: $("#new-customer-street").val(),
+                      Phone: $("#new-customer-phone").val()
+                  }
+              },
+              function (data) {
+                  so.customer = data.ID;
+                  // reset values
+                  $("#customer-name").val($("#new-customer-name").val());
+                  $("#new-customer-name").val("");
+                  $("#new-customer-city").val("");
+                  $("#create-new-customer").slideUp();
+              },
+              function (err) {
+                  alert(err.message);
+              }
+            );
+        }
+    });
+
+    // tables
+    function readMoreData(url, arr, table, cb) {
+        OData.read({
+            requestUri: url,
+            recognizeDates: true
+        }, function (data) {
+            arr = arr.concat(data.results);
+            if (data.__next) {
+                readMoreData(data.__next, arr, table, cb);
+            } else {
+                return cb(table, arr);
+            }
+        });
+    }
+
+    function usDate(dateObject) {
+        return dateObject.getMonth() + 1 + "/" + dateObject.getDate() + "/" + dateObject.getFullYear();
+    }
+
+    // reload table
+    function reloadTable(table, statusId, searchId) {
+        var status = $("#" + statusId).val();
+        var searchtext = $("#" + searchId).val();
+        var url = document.location.href + "ODataERP.svc/SalesOrder?$expand=Customer&$filter=Status eq " + status + ((searchtext) ? " and indexof(Customer/Name, '" + searchtext + "') gt -1" : "");
+
+        readMoreData(url, [], table, redrawTable);
+    }
+
+    var mapStatus = ["releasable", "deliverable", "to be invoiced", "completed"];
+
+    function redrawTable(table, arr) {
+        var data = [];
+        for (var i = 0; i < arr.length; i++) {
+            data.push([arr[i].ID, mapStatus[arr[i].Status], usDate(arr[i].DeliveryDate), arr[i].Customer.Name]);
+        }
+        table.fnClearTable();
+        table.fnAddData(data);
+
+    }
+
+    // release goods
+    var releaseGoodsTable = $('#release-goods-table').dataTable();
+
+    $('#release-goods-table tr').live("click", function () {
+        $(this).toggleClass('row_selected');
+    });
+
+    $("#release-goods-status").change(function () {
+        reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+    });
+
+    $("#release-goods-search").keyup(function () {
+        reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+    })
+
+    $("#release-goods-button").click(function () {
+        $.each($('#release-goods-table tr.row_selected'), function (index_tr, tr) {
+            var salesOrderId = parseInt($("td:first", tr).html());
+            OData.request({
+                requestUri: document.location.href + "ODataERP.svc/SalesOrder(" + salesOrderId + ")/Status/$value",
+                method: "PUT",
+                headers: { "Content-Type": "text/plain" },
+                data: 1
+            }, function success(data, response) {
+                reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+            }, function errorr(err) {
+                console.log(err);
+            });
+        });
     });
 });

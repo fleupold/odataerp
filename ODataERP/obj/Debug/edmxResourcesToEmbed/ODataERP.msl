@@ -5,8 +5,24 @@
       <EntityTypeMapping TypeName="ODataERPModel.Customer">
         <MappingFragment StoreEntitySet="Customer">
           <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
           <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="Street" ColumnName="Street" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Invoice">
+      <EntityTypeMapping TypeName="ODataERPModel.Invoice">
+        <MappingFragment StoreEntitySet="Invoice">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+          <ScalarProperty Name="SalesOrderID" ColumnName="SalesOrderID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -37,7 +53,13 @@
           <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
           <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
           <ScalarProperty Name="Priority" ColumnName="Priority" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="NetValue" ColumnName="NetValue" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Shipping" ColumnName="Shipping" />
+          <ScalarProperty Name="Tax" ColumnName="Tax" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

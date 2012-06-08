@@ -7,9 +7,14 @@
       <Schema Namespace="ODataERPModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="ODataERPModelStoreContainer">
           <EntitySet Name="Customer" EntityType="ODataERPModel.Store.Customer" store:Type="Tables" />
+          <EntitySet Name="Invoice" EntityType="ODataERPModel.Store.Invoice" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="ODataERPModel.Store.Product" store:Type="Tables" />
           <EntitySet Name="ProductForSalesOrder" EntityType="ODataERPModel.Store.ProductForSalesOrder" store:Type="Tables" />
           <EntitySet Name="SalesOrder" EntityType="ODataERPModel.Store.SalesOrder" store:Type="Tables" />
+          <AssociationSet Name="Invoice_SalesOrder" Association="ODataERPModel.Store.Invoice_SalesOrder">
+            <End Role="SalesOrder" EntitySet="SalesOrder" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
           <AssociationSet Name="ProductForSalesOrder_Product" Association="ODataERPModel.Store.ProductForSalesOrder_Product">
             <End Role="Product" EntitySet="Product" />
             <End Role="ProductForSalesOrder" EntitySet="ProductForSalesOrder" />
@@ -28,8 +33,23 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Discount" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" />
-          <Property Name="Address" Type="nvarchar" />
+          <Property Name="Country" Type="nvarchar" />
+          <Property Name="State" Type="nvarchar" />
+          <Property Name="City" Type="nvarchar" />
+          <Property Name="Zip" Type="nvarchar" />
+          <Property Name="Street" Type="nvarchar" />
+          <Property Name="Phone" Type="nvarchar" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="AmountPaid" Type="numeric" Nullable="false" Scale="2" />
+          <Property Name="SalesOrderID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -57,8 +77,28 @@
           <Property Name="DeliveryDate" Type="datetime" Nullable="false" />
           <Property Name="PaymentTerms" Type="int" Nullable="false" />
           <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="NetValue" Type="float" Nullable="false" />
+          <Property Name="Discount" Type="float" Nullable="false" />
+          <Property Name="Shipping" Type="float" Nullable="false" />
+          <Property Name="Tax" Type="float" Nullable="false" />
+          <Property Name="Total" Type="float" Nullable="false" />
         </EntityType>
+        <Association Name="Invoice_SalesOrder">
+          <End Role="SalesOrder" Type="ODataERPModel.Store.SalesOrder" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Invoice" Type="ODataERPModel.Store.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="SalesOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="ProductForSalesOrder_Product">
           <End Role="Product" Type="ODataERPModel.Store.Product" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -108,12 +148,17 @@
       <Schema Namespace="ODataERPModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="ODataERPEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Customer" EntityType="ODataERPModel.Customer" />
+          <EntitySet Name="Invoice" EntityType="ODataERPModel.Invoice" />
           <EntitySet Name="Product" EntityType="ODataERPModel.Product" />
           <EntitySet Name="ProductForSalesOrder" EntityType="ODataERPModel.ProductForSalesOrder" />
           <EntitySet Name="SalesOrder" EntityType="ODataERPModel.SalesOrder" />
           <AssociationSet Name="SalesOrder_Customer" Association="ODataERPModel.SalesOrder_Customer">
             <End Role="Customer" EntitySet="Customer" />
             <End Role="SalesOrder" EntitySet="SalesOrder" />
+          </AssociationSet>
+          <AssociationSet Name="Invoice_SalesOrder" Association="ODataERPModel.Invoice_SalesOrder">
+            <End Role="SalesOrder" EntitySet="SalesOrder" />
+            <End Role="Invoice" EntitySet="Invoice" />
           </AssociationSet>
           <AssociationSet Name="ProductForSalesOrder_Product" Association="ODataERPModel.ProductForSalesOrder_Product">
             <End Role="Product" EntitySet="Product" />
@@ -129,9 +174,25 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Discount" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
-          <Property Name="Address" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="Country" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="State" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="City" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="Zip" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="Street" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="Phone" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="SalesOrder" Relationship="ODataERPModel.SalesOrder_Customer" FromRole="Customer" ToRole="SalesOrder" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="AmountPaid" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="SalesOrderID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SalesOrder" Relationship="ODataERPModel.Invoice_SalesOrder" FromRole="Invoice" ToRole="SalesOrder" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -162,8 +223,15 @@
           <Property Name="DeliveryDate" Type="DateTime" Nullable="false" />
           <Property Name="PaymentTerms" Type="Int32" Nullable="false" />
           <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="NetValue" Type="Double" Nullable="false" />
+          <Property Name="Discount" Type="Double" Nullable="false" />
+          <Property Name="Shipping" Type="Double" Nullable="false" />
+          <Property Name="Tax" Type="Double" Nullable="false" />
+          <Property Name="Total" Type="Double" Nullable="false" />
           <NavigationProperty Name="Customer" Relationship="ODataERPModel.SalesOrder_Customer" FromRole="SalesOrder" ToRole="Customer" />
+          <NavigationProperty Name="Invoice" Relationship="ODataERPModel.Invoice_SalesOrder" FromRole="SalesOrder" ToRole="Invoice" />
           <NavigationProperty Name="ProductForSalesOrder" Relationship="ODataERPModel.SalesOrder_ProductForSalesOrders" FromRole="SalesOrder" ToRole="ProductForSalesOrder" />
         </EntityType>
         <Association Name="SalesOrder_Customer">
@@ -177,6 +245,20 @@
             </Principal>
             <Dependent Role="SalesOrder">
               <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Invoice_SalesOrder">
+          <End Role="SalesOrder" Type="ODataERPModel.SalesOrder" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Invoice" Type="ODataERPModel.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesOrder">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="SalesOrderID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -216,8 +298,20 @@
         <EntityContainerMapping StorageEntityContainer="ODataERPModelStoreContainer" CdmEntityContainer="ODataERPEntities">
           <EntitySetMapping Name="Customer"><EntityTypeMapping TypeName="ODataERPModel.Customer"><MappingFragment StoreEntitySet="Customer">
             <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Discount" ColumnName="Discount" />
             <ScalarProperty Name="Name" ColumnName="Name" />
-            <ScalarProperty Name="Address" ColumnName="Address" />
+            <ScalarProperty Name="Country" ColumnName="Country" />
+            <ScalarProperty Name="State" ColumnName="State" />
+            <ScalarProperty Name="City" ColumnName="City" />
+            <ScalarProperty Name="Zip" ColumnName="Zip" />
+            <ScalarProperty Name="Street" ColumnName="Street" />
+            <ScalarProperty Name="Phone" ColumnName="Phone" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Invoice"><EntityTypeMapping TypeName="ODataERPModel.Invoice"><MappingFragment StoreEntitySet="Invoice">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
+            <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+            <ScalarProperty Name="SalesOrderID" ColumnName="SalesOrderID" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Product"><EntityTypeMapping TypeName="ODataERPModel.Product"><MappingFragment StoreEntitySet="Product">
             <ScalarProperty Name="ID" ColumnName="ID" />
@@ -236,7 +330,13 @@
             <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
             <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
             <ScalarProperty Name="Priority" ColumnName="Priority" />
+            <ScalarProperty Name="Status" ColumnName="Status" />
             <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+            <ScalarProperty Name="NetValue" ColumnName="NetValue" />
+            <ScalarProperty Name="Discount" ColumnName="Discount" />
+            <ScalarProperty Name="Shipping" ColumnName="Shipping" />
+            <ScalarProperty Name="Tax" ColumnName="Tax" />
+            <ScalarProperty Name="Total" ColumnName="Total" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
@@ -259,22 +359,33 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="ODataERP">
-        <EntityTypeShape EntityType="ODataERPModel.Customer" Width="1.5" PointX="0.75" PointY="1.25" Height="1.7879850260416668" IsExpanded="true" />
-        <EntityTypeShape EntityType="ODataERPModel.Product" Width="1.5" PointX="3" PointY="5.125" Height="1.9802864583333335" IsExpanded="true" />
-        <EntityTypeShape EntityType="ODataERPModel.ProductForSalesOrder" Width="1.5" PointX="5.25" PointY="1" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="ODataERPModel.SalesOrder" Width="1.5" PointX="3" PointY="1" Height="2.3648893229166656" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.Customer" Width="1.5" PointX="0.75" PointY="3.375" Height="2.941793619791667" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.Invoice" Width="1.5" PointX="5.25" PointY="3.875" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.Product" Width="1.5" PointX="3" PointY="7.625" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.ProductForSalesOrder" Width="1.5" PointX="5.25" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.SalesOrder" Width="1.5" PointX="3" PointY="3" Height="3.7109993489583335" IsExpanded="true" />
         <AssociationConnector Association="ODataERPModel.SalesOrder_Customer" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="2.1439925130208333" />
-          <ConnectorPoint PointX="3" PointY="2.1439925130208333" />
+          <ConnectorPoint PointX="2.25" PointY="4.8458968098958337" />
+          <ConnectorPoint PointX="3" PointY="4.8458968098958337" />
+        </AssociationConnector>
+        <AssociationConnector Association="ODataERPModel.Invoice_SalesOrder" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="4.8651432291666667" />
+          <ConnectorPoint PointX="4.791666666666667" PointY="4.8651432291666659" />
+          <ConnectorPoint PointX="4.958333333333333" PointY="4.8651432291666667" />
+          <ConnectorPoint PointX="5.25" PointY="4.8651432291666667" />
         </AssociationConnector>
         <AssociationConnector Association="ODataERPModel.ProductForSalesOrder_Product" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="6.1151432291666667" />
-          <ConnectorPoint PointX="6" PointY="6.1151432291666667" />
-          <ConnectorPoint PointX="6" PointY="3.1725878906249996" />
+          <ConnectorPoint PointX="4.5" PointY="7.625" />
+          <ConnectorPoint PointX="4.875" PointY="7.25" />
+          <ConnectorPoint PointX="4.875" PointY="1.8362939453124998" />
+          <ConnectorPoint PointX="5.25" PointY="1.8362939453124998" />
         </AssociationConnector>
         <AssociationConnector Association="ODataERPModel.SalesOrder_ProductForSalesOrders" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="2.0862939453125" />
-          <ConnectorPoint PointX="5.25" PointY="2.0862939453125" />
+          <ConnectorPoint PointX="3.75" PointY="3" />
+          <ConnectorPoint PointX="3.75" PointY="2.4106934179687505" />
+          <ConnectorPoint PointX="4.791666666666667" PointY="2.41069341796875" />
+          <ConnectorPoint PointX="4.958333333333333" PointY="2.4106934179687505" />
+          <ConnectorPoint PointX="5.25" PointY="2.4106934179687505" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

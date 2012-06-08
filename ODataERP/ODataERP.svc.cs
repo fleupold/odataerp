@@ -15,7 +15,7 @@ namespace ODataERP
         {
             // TODO: Regeln festlegen, die angeben, welche Entitätssets und welche Dienstvorgänge sichtbar, aktualisierbar usw. sind
             // Beispiele:
-            config.SetEntitySetAccessRule("*", EntitySetRights.);
+            config.SetEntitySetAccessRule("*", EntitySetRights.All);
             // config.SetServiceOperationAccessRule("MyServiceOperation", ServiceOperationRights.All);
             config.DataServiceBehavior.MaxProtocolVersion = DataServiceProtocolVersion.V2;
         }

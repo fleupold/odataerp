@@ -19,6 +19,7 @@ using System.Runtime.Serialization;
 #region EDM-Beziehungsmetadaten
 
 [assembly: EdmRelationshipAttribute("ODataERPModel", "SalesOrder_Customer", "Customer", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ODataERP.Customer), "SalesOrder", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ODataERP.SalesOrder), true)]
+[assembly: EdmRelationshipAttribute("ODataERPModel", "Invoice_SalesOrder", "SalesOrder", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ODataERP.SalesOrder), "Invoice", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ODataERP.Invoice), true)]
 [assembly: EdmRelationshipAttribute("ODataERPModel", "ProductForSalesOrder_Product", "Product", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ODataERP.Product), "ProductForSalesOrder", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ODataERP.ProductForSalesOrder), true)]
 [assembly: EdmRelationshipAttribute("ODataERPModel", "SalesOrder_ProductForSalesOrders", "SalesOrder", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ODataERP.SalesOrder), "ProductForSalesOrder", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ODataERP.ProductForSalesOrder), true)]
 
@@ -91,6 +92,22 @@ namespace ODataERP
         /// <summary>
         /// Keine Dokumentation für Metadaten verfügbar.
         /// </summary>
+        public ObjectSet<Invoice> Invoice
+        {
+            get
+            {
+                if ((_Invoice == null))
+                {
+                    _Invoice = base.CreateObjectSet<Invoice>("Invoice");
+                }
+                return _Invoice;
+            }
+        }
+        private ObjectSet<Invoice> _Invoice;
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
         public ObjectSet<Product> Product
         {
             get
@@ -148,6 +165,14 @@ namespace ODataERP
         }
     
         /// <summary>
+        /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'Invoice'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
+        /// </summary>
+        public void AddToInvoice(Invoice invoice)
+        {
+            base.AddObject("Invoice", invoice);
+        }
+    
+        /// <summary>
         /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'Product'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
         /// </summary>
         public void AddToProduct(Product product)
@@ -193,10 +218,12 @@ namespace ODataERP
         /// Erstellt ein neues Customer-Objekt.
         /// </summary>
         /// <param name="id">Anfangswert der Eigenschaft ID.</param>
-        public static Customer CreateCustomer(global::System.Int32 id)
+        /// <param name="discount">Anfangswert der Eigenschaft Discount.</param>
+        public static Customer CreateCustomer(global::System.Int32 id, global::System.Int32 discount)
         {
             Customer customer = new Customer();
             customer.ID = id;
+            customer.Discount = discount;
             return customer;
         }
 
@@ -233,6 +260,30 @@ namespace ODataERP
         /// <summary>
         /// Keine Dokumentation für Metadaten verfügbar.
         /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Discount
+        {
+            get
+            {
+                return _Discount;
+            }
+            set
+            {
+                OnDiscountChanging(value);
+                ReportPropertyChanging("Discount");
+                _Discount = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Discount");
+                OnDiscountChanged();
+            }
+        }
+        private global::System.Int32 _Discount;
+        partial void OnDiscountChanging(global::System.Int32 value);
+        partial void OnDiscountChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Name
@@ -259,24 +310,144 @@ namespace ODataERP
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String Address
+        public global::System.String Country
         {
             get
             {
-                return _Address;
+                return _Country;
             }
             set
             {
-                OnAddressChanging(value);
-                ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Address");
-                OnAddressChanged();
+                OnCountryChanging(value);
+                ReportPropertyChanging("Country");
+                _Country = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Country");
+                OnCountryChanged();
             }
         }
-        private global::System.String _Address;
-        partial void OnAddressChanging(global::System.String value);
-        partial void OnAddressChanged();
+        private global::System.String _Country;
+        partial void OnCountryChanging(global::System.String value);
+        partial void OnCountryChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String State
+        {
+            get
+            {
+                return _State;
+            }
+            set
+            {
+                OnStateChanging(value);
+                ReportPropertyChanging("State");
+                _State = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("State");
+                OnStateChanged();
+            }
+        }
+        private global::System.String _State;
+        partial void OnStateChanging(global::System.String value);
+        partial void OnStateChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String City
+        {
+            get
+            {
+                return _City;
+            }
+            set
+            {
+                OnCityChanging(value);
+                ReportPropertyChanging("City");
+                _City = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("City");
+                OnCityChanged();
+            }
+        }
+        private global::System.String _City;
+        partial void OnCityChanging(global::System.String value);
+        partial void OnCityChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Zip
+        {
+            get
+            {
+                return _Zip;
+            }
+            set
+            {
+                OnZipChanging(value);
+                ReportPropertyChanging("Zip");
+                _Zip = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Zip");
+                OnZipChanged();
+            }
+        }
+        private global::System.String _Zip;
+        partial void OnZipChanging(global::System.String value);
+        partial void OnZipChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Street
+        {
+            get
+            {
+                return _Street;
+            }
+            set
+            {
+                OnStreetChanging(value);
+                ReportPropertyChanging("Street");
+                _Street = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Street");
+                OnStreetChanged();
+            }
+        }
+        private global::System.String _Street;
+        partial void OnStreetChanging(global::System.String value);
+        partial void OnStreetChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Phone
+        {
+            get
+            {
+                return _Phone;
+            }
+            set
+            {
+                OnPhoneChanging(value);
+                ReportPropertyChanging("Phone");
+                _Phone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Phone");
+                OnPhoneChanged();
+            }
+        }
+        private global::System.String _Phone;
+        partial void OnPhoneChanging(global::System.String value);
+        partial void OnPhoneChanged();
 
         #endregion
     
@@ -300,6 +471,180 @@ namespace ODataERP
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SalesOrder>("ODataERPModel.SalesOrder_Customer", "SalesOrder", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Keine Dokumentation für Metadaten verfügbar.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="ODataERPModel", Name="Invoice")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Invoice : EntityObject
+    {
+        #region Factory-Methode
+    
+        /// <summary>
+        /// Erstellt ein neues Invoice-Objekt.
+        /// </summary>
+        /// <param name="id">Anfangswert der Eigenschaft ID.</param>
+        /// <param name="status">Anfangswert der Eigenschaft Status.</param>
+        /// <param name="amountPaid">Anfangswert der Eigenschaft AmountPaid.</param>
+        /// <param name="salesOrderID">Anfangswert der Eigenschaft SalesOrderID.</param>
+        public static Invoice CreateInvoice(global::System.Int32 id, global::System.Int32 status, global::System.Decimal amountPaid, global::System.Int32 salesOrderID)
+        {
+            Invoice invoice = new Invoice();
+            invoice.ID = id;
+            invoice.Status = status;
+            invoice.AmountPaid = amountPaid;
+            invoice.SalesOrderID = salesOrderID;
+            return invoice;
+        }
+
+        #endregion
+        #region Primitive Eigenschaften
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                if (_ID != value)
+                {
+                    OnIDChanging(value);
+                    ReportPropertyChanging("ID");
+                    _ID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ID");
+                    OnIDChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ID;
+        partial void OnIDChanging(global::System.Int32 value);
+        partial void OnIDChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int32 _Status;
+        partial void OnStatusChanging(global::System.Int32 value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal AmountPaid
+        {
+            get
+            {
+                return _AmountPaid;
+            }
+            set
+            {
+                OnAmountPaidChanging(value);
+                ReportPropertyChanging("AmountPaid");
+                _AmountPaid = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AmountPaid");
+                OnAmountPaidChanged();
+            }
+        }
+        private global::System.Decimal _AmountPaid;
+        partial void OnAmountPaidChanging(global::System.Decimal value);
+        partial void OnAmountPaidChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 SalesOrderID
+        {
+            get
+            {
+                return _SalesOrderID;
+            }
+            set
+            {
+                OnSalesOrderIDChanging(value);
+                ReportPropertyChanging("SalesOrderID");
+                _SalesOrderID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SalesOrderID");
+                OnSalesOrderIDChanged();
+            }
+        }
+        private global::System.Int32 _SalesOrderID;
+        partial void OnSalesOrderIDChanging(global::System.Int32 value);
+        partial void OnSalesOrderIDChanged();
+
+        #endregion
+    
+        #region Navigationseigenschaften
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("ODataERPModel", "Invoice_SalesOrder", "SalesOrder")]
+        public SalesOrder SalesOrder
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalesOrder>("ODataERPModel.Invoice_SalesOrder", "SalesOrder").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalesOrder>("ODataERPModel.Invoice_SalesOrder", "SalesOrder").Value = value;
+            }
+        }
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<SalesOrder> SalesOrderReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SalesOrder>("ODataERPModel.Invoice_SalesOrder", "SalesOrder");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SalesOrder>("ODataERPModel.Invoice_SalesOrder", "SalesOrder", value);
                 }
             }
         }
@@ -692,15 +1037,27 @@ namespace ODataERP
         /// <param name="deliveryDate">Anfangswert der Eigenschaft DeliveryDate.</param>
         /// <param name="paymentTerms">Anfangswert der Eigenschaft PaymentTerms.</param>
         /// <param name="priority">Anfangswert der Eigenschaft Priority.</param>
+        /// <param name="status">Anfangswert der Eigenschaft Status.</param>
         /// <param name="customerID">Anfangswert der Eigenschaft CustomerID.</param>
-        public static SalesOrder CreateSalesOrder(global::System.Int32 id, global::System.DateTime deliveryDate, global::System.Int32 paymentTerms, global::System.Int32 priority, global::System.Int32 customerID)
+        /// <param name="netValue">Anfangswert der Eigenschaft NetValue.</param>
+        /// <param name="discount">Anfangswert der Eigenschaft Discount.</param>
+        /// <param name="shipping">Anfangswert der Eigenschaft Shipping.</param>
+        /// <param name="tax">Anfangswert der Eigenschaft Tax.</param>
+        /// <param name="total">Anfangswert der Eigenschaft Total.</param>
+        public static SalesOrder CreateSalesOrder(global::System.Int32 id, global::System.DateTime deliveryDate, global::System.Int32 paymentTerms, global::System.Int32 priority, global::System.Int32 status, global::System.Int32 customerID, global::System.Double netValue, global::System.Double discount, global::System.Double shipping, global::System.Double tax, global::System.Double total)
         {
             SalesOrder salesOrder = new SalesOrder();
             salesOrder.ID = id;
             salesOrder.DeliveryDate = deliveryDate;
             salesOrder.PaymentTerms = paymentTerms;
             salesOrder.Priority = priority;
+            salesOrder.Status = status;
             salesOrder.CustomerID = customerID;
+            salesOrder.NetValue = netValue;
+            salesOrder.Discount = discount;
+            salesOrder.Shipping = shipping;
+            salesOrder.Tax = tax;
+            salesOrder.Total = total;
             return salesOrder;
         }
 
@@ -811,6 +1168,30 @@ namespace ODataERP
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
+        public global::System.Int32 Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.Int32 _Status;
+        partial void OnStatusChanging(global::System.Int32 value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
         public global::System.Int32 CustomerID
         {
             get
@@ -829,6 +1210,126 @@ namespace ODataERP
         private global::System.Int32 _CustomerID;
         partial void OnCustomerIDChanging(global::System.Int32 value);
         partial void OnCustomerIDChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double NetValue
+        {
+            get
+            {
+                return _NetValue;
+            }
+            set
+            {
+                OnNetValueChanging(value);
+                ReportPropertyChanging("NetValue");
+                _NetValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NetValue");
+                OnNetValueChanged();
+            }
+        }
+        private global::System.Double _NetValue;
+        partial void OnNetValueChanging(global::System.Double value);
+        partial void OnNetValueChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Discount
+        {
+            get
+            {
+                return _Discount;
+            }
+            set
+            {
+                OnDiscountChanging(value);
+                ReportPropertyChanging("Discount");
+                _Discount = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Discount");
+                OnDiscountChanged();
+            }
+        }
+        private global::System.Double _Discount;
+        partial void OnDiscountChanging(global::System.Double value);
+        partial void OnDiscountChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Shipping
+        {
+            get
+            {
+                return _Shipping;
+            }
+            set
+            {
+                OnShippingChanging(value);
+                ReportPropertyChanging("Shipping");
+                _Shipping = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Shipping");
+                OnShippingChanged();
+            }
+        }
+        private global::System.Double _Shipping;
+        partial void OnShippingChanging(global::System.Double value);
+        partial void OnShippingChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Tax
+        {
+            get
+            {
+                return _Tax;
+            }
+            set
+            {
+                OnTaxChanging(value);
+                ReportPropertyChanging("Tax");
+                _Tax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Tax");
+                OnTaxChanged();
+            }
+        }
+        private global::System.Double _Tax;
+        partial void OnTaxChanging(global::System.Double value);
+        partial void OnTaxChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Total
+        {
+            get
+            {
+                return _Total;
+            }
+            set
+            {
+                OnTotalChanging(value);
+                ReportPropertyChanging("Total");
+                _Total = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Total");
+                OnTotalChanged();
+            }
+        }
+        private global::System.Double _Total;
+        partial void OnTotalChanging(global::System.Double value);
+        partial void OnTotalChanged();
 
         #endregion
     
@@ -868,6 +1369,28 @@ namespace ODataERP
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Customer>("ODataERPModel.SalesOrder_Customer", "Customer", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("ODataERPModel", "Invoice_SalesOrder", "Invoice")]
+        public EntityCollection<Invoice> Invoice
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Invoice>("ODataERPModel.Invoice_SalesOrder", "Invoice");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Invoice>("ODataERPModel.Invoice_SalesOrder", "Invoice", value);
                 }
             }
         }

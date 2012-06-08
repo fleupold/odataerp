@@ -9,6 +9,7 @@
         <li><a href="#post-goods-issue">Post Goods Issue</a></li>
         <li><a href="#post-customer-invoice">Post Customer Invoice</a></li>
         <li><a href="#dun-customer">Dun Customer</a></li>
+        <li><a href="#analytics">Analytics</a></li>
     </ul>
     <div id="create-sales-order">
         <h2>Create Sales Order</h2>
@@ -19,7 +20,61 @@
                     Customer name:
                 </td>
                 <td>
-                    <input id="customer-name" />
+                    <input id="customer-name" /><button id="show-add-customer"></button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" id="create-new-customer">
+                    <table>
+                        <tr>
+                            <td>
+                                <h3>New Customer</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Name:</td>
+                            <td><input id="new-customer-name" /></td>
+                        </tr>
+                        <tr>
+                            <td>Discount:</td>
+                            <td>
+                                <select id="new-customer-discount">
+                                    <option value="0" selected="selected">0 &#37;</option>
+                                    <option value="1">1 &#37;</option>
+                                    <option value="2">2 &#37;</option>
+                                    <option value="3">3 &#37;</option>
+                                    <option value="4">4 &#37;</option>
+                                    <option value="5">5 &#37;</option>
+                                    <option value="10">10 &#37;</option>
+                                    <option value="20">20 &#37;</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Country:</td>
+                            <td><input id="new-customer-country" /></td>
+                        </tr>
+                        <tr>
+                            <td>State:</td>
+                            <td><input id="new-customer-state" /></td>
+                        </tr>
+                        <tr>
+                            <td>City:</td>
+                            <td><input id="new-customer-city" /></td>
+                        </tr>
+                        <tr>
+                            <td>ZIP:</td>
+                            <td><input id="new-customer-zip" /></td>
+                        </tr>
+                        <tr>
+                            <td>Street:</td>
+                            <td><input id="new-customer-street" /></td>
+                        </tr>
+                        <tr>
+                            <td>Phone:</td>
+                            <td><input id="new-customer-phone" /> <button id="add-customer"></button></td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr>
@@ -65,7 +120,7 @@
             <tr>
                 <td>Discount</td>
                 <td>
-                    <select id="order-discount" />
+                    <select id="order-discount">
                         <option value="0" selected="selected">0 &#37;</option>
                         <option value="1">1 &#37;</option>
                         <option value="2">2 &#37;</option>
@@ -121,6 +176,30 @@
     </div>
     <div id="release-goods">
         <h2>Release Goods</h2>
+        <div>
+            Status:
+            <select id="release-goods-status">
+                <option value="0" selected="selected">releasable</option>
+                <option value="1">deliverable</option>
+                <option value="2">to be invoiced</option>
+                <option value="3">completed</option>
+            </select>
+            and find
+            <input type="text" id="release-goods-search" />
+        </div>
+        <table id="release-goods-table">
+            <thead>
+                <tr>
+                    <th>Oder ID</th>
+                    <th>Status</th>
+                    <th>Requested Delivery Date</th>
+                    <th>Customer</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button id="release-goods-button"></button>
     </div>
     <div id="post-goods-issue">
        <h2>Post Goods Issues</h2>
@@ -130,5 +209,8 @@
     </div>
     <div id="dun-customer">
        <h2>Dun Customer</h2>
+    </div>
+    <div id="analytics">
+       <h2>Analytics</h2>
     </div>
 </div>

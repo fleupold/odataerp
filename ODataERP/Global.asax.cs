@@ -40,6 +40,7 @@ namespace ODataERP
             RegisterRoutes(RouteTable.Routes);
 
             Database.SetInitializer<ODataERPContext>(new ODataERPInitializer());
+
         }
     }
 }

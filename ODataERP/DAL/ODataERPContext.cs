@@ -12,6 +12,7 @@ namespace ODataERP.DAL
         public DbSet<Product> Products { get; set; }
         public DbSet<SalesOrder> SalesOrders { get; set; }
         public DbSet<ProductForSalesOrder> ProductForSalesOrders { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
