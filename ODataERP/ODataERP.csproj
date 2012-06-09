@@ -71,6 +71,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductForSalesOrderController.cs" />
+    <Compile Include="Controllers\SalesOrderController.cs" />
     <Compile Include="DAL\ODataERPContext.cs" />
     <Compile Include="DAL\ODataERPInitializer.cs" />
     <Compile Include="Global.asax.cs">
@@ -78,7 +81,6 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Customer.cs" />
-    <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductForSalesOrder.cs" />
     <Compile Include="Models\SalesOrder.cs" />
@@ -157,6 +159,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\images\Sorting icons.psd" />
+    <Content Include="Views\SalesOrder\Index.cshtml" />
+    <Content Include="Views\SalesOrder\Details.cshtml" />
+    <Content Include="Views\SalesOrder\Create.cshtml" />
+    <Content Include="Views\SalesOrder\Edit.cshtml" />
+    <Content Include="Views\SalesOrder\Delete.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Product\Delete.cshtml" />
+    <Content Include="Views\ProductForSalesOrder\Index.cshtml" />
+    <Content Include="Views\ProductForSalesOrder\Details.cshtml" />
+    <Content Include="Views\ProductForSalesOrder\Create.cshtml" />
+    <Content Include="Views\ProductForSalesOrder\Edit.cshtml" />
+    <Content Include="Views\ProductForSalesOrder\Delete.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Customer\Details.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />

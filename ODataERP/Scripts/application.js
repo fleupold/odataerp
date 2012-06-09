@@ -21,6 +21,12 @@ $(function () {
             if (ui.index == 1) {
                 reloadTable();
             }
+            else if (ui.index == 2) {
+                reloadDunTable();
+            }
+            else if (ui.index == 3) {
+                reloadAnalytics();
+            }
         }
     });
 
@@ -62,6 +68,12 @@ $(function () {
             primary: "ui-icon-arrowreturnthick-1-e"
         },
         label: "Release"
+    });
+    $("#dun-button").button({
+        icons: {
+            primary: "ui-icon-arrowreturnthick-1-e"
+        },
+        label: "Dun"
     });
 
     // oder delivery datepicker
@@ -249,7 +261,9 @@ $(function () {
                                 Discount: discount,
                                 Shipping: shipping,
                                 Tax: tax,
-                                Total: total
+                                Total: total,
+                                AmountPaid: 0.0,
+                                DunStatus: 0
                             }
                         }
                     ]
@@ -363,7 +377,6 @@ $(function () {
         }
         changeTable.fnClearTable();
         changeTable.fnAddData(data);
-
     }
 
     // release goods + post goods issues + invoice
@@ -427,7 +440,7 @@ $(function () {
                           }
                       },
                       function (data) {
-                        // pass
+                          // pass
                       },
                       function (err) {
                           console.log(err);
@@ -439,4 +452,67 @@ $(function () {
             });
         });
     });
+
+    // dun customer
+    var dunTable = $('#dun-table').dataTable();
+
+    $('#dun-table tr').live("click", function () {
+        $(this).toggleClass('row_selected');
+    });
+
+    function getDunStatus(obj) {
+        if (obj.DunStatus == 2) {
+            return "dunned";
+        }
+        else {
+            var today = new Date();
+            var diff = today - obj.DeliveryDate;
+            var days = Math.round(diff / (1000 * 60 * 60 * 24));
+            if (days > obj.PaymentTerms) {
+                return "dunnable"
+            }
+            else { 
+                return "on time"
+            }
+        }
+    }
+
+    function redrawDunTable(arr) {
+        var data = [];
+        for (var i = 0; i < arr.length; i++) {
+            data.push([arr[i].Customer.Name, arr[i].ID, getDunStatus(arr[i]), usDate(arr[i].DeliveryDate) + " - Payment Terms:" + arr[i].PaymentTerms + " Days", (arr[i].Total + " EUR"), (arr[i].AmountPaid + " EUR")]);
+        }
+        dunTable.fnClearTable();
+        dunTable.fnAddData(data);
+    }
+
+    function reloadDunTable() {
+        var url = document.location.href + "ODataERP.svc/SalesOrder?$expand=Customer&$filter=Status eq 3";
+        readMoreData(url, [], redrawDunTable);
+    }
+
+    $("#dun-button").click(function () {
+        $.each($('#dun-table tr.row_selected'), function (index_tr, tr) {
+            var salesOrderId = parseInt($($("td", tr)[1]).html());
+            if ($($("td", tr)[2]).html() == "dunnable") {
+                OData.request({
+                    requestUri: document.location.href + "ODataERP.svc/SalesOrder(" + salesOrderId + ")/DunStatus/$value",
+                    method: "PUT",
+                    headers: { "Content-Type": "text/plain" },
+                    data: 1
+                }, function success(data, response) {
+                    reloadDunTable();
+                }, function errorr(err) {
+                    console.log(err);
+                });
+            }
+        });
+    });
+
+    // analytics
+    function reloadAnalytics() {
+        $("#analytics-avg-duration").html("?");
+        $("#analytics-dpp").html("?");
+        $("#analytics-avg-orders").html("?");
+    }
 });

@@ -16,16 +16,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Invoice">
-      <EntityTypeMapping TypeName="ODataERPModel.Invoice">
-        <MappingFragment StoreEntitySet="Invoice">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
-          <ScalarProperty Name="SalesOrderID" ColumnName="SalesOrderID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Product">
       <EntityTypeMapping TypeName="ODataERPModel.Product">
         <MappingFragment StoreEntitySet="Product">
@@ -60,6 +50,8 @@
           <ScalarProperty Name="Shipping" ColumnName="Shipping" />
           <ScalarProperty Name="Tax" ColumnName="Tax" />
           <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+          <ScalarProperty Name="DunStatus" ColumnName="DunStatus" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

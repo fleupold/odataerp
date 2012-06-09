@@ -2,17 +2,12 @@
 <Schema Namespace="ODataERPModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
   <EntityContainer Name="ODataERPEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Customer" EntityType="ODataERPModel.Customer" />
-    <EntitySet Name="Invoice" EntityType="ODataERPModel.Invoice" />
     <EntitySet Name="Product" EntityType="ODataERPModel.Product" />
     <EntitySet Name="ProductForSalesOrder" EntityType="ODataERPModel.ProductForSalesOrder" />
     <EntitySet Name="SalesOrder" EntityType="ODataERPModel.SalesOrder" />
     <AssociationSet Name="SalesOrder_Customer" Association="ODataERPModel.SalesOrder_Customer">
       <End Role="Customer" EntitySet="Customer" />
       <End Role="SalesOrder" EntitySet="SalesOrder" />
-    </AssociationSet>
-    <AssociationSet Name="Invoice_SalesOrder" Association="ODataERPModel.Invoice_SalesOrder">
-      <End Role="SalesOrder" EntitySet="SalesOrder" />
-      <End Role="Invoice" EntitySet="Invoice" />
     </AssociationSet>
     <AssociationSet Name="ProductForSalesOrder_Product" Association="ODataERPModel.ProductForSalesOrder_Product">
       <End Role="Product" EntitySet="Product" />
@@ -37,16 +32,6 @@
     <Property Name="Street" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
     <Property Name="Phone" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="SalesOrder" Relationship="ODataERPModel.SalesOrder_Customer" FromRole="Customer" ToRole="SalesOrder" />
-  </EntityType>
-  <EntityType Name="Invoice">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Status" Type="Int32" Nullable="false" />
-    <Property Name="AmountPaid" Type="Double" Nullable="false" />
-    <Property Name="SalesOrderID" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="SalesOrder" Relationship="ODataERPModel.Invoice_SalesOrder" FromRole="Invoice" ToRole="SalesOrder" />
   </EntityType>
   <EntityType Name="Product">
     <Key>
@@ -84,8 +69,9 @@
     <Property Name="Shipping" Type="Double" Nullable="false" />
     <Property Name="Tax" Type="Double" Nullable="false" />
     <Property Name="Total" Type="Double" Nullable="false" />
+    <Property Name="AmountPaid" Type="Double" Nullable="false" />
+    <Property Name="DunStatus" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Customer" Relationship="ODataERPModel.SalesOrder_Customer" FromRole="SalesOrder" ToRole="Customer" />
-    <NavigationProperty Name="Invoice" Relationship="ODataERPModel.Invoice_SalesOrder" FromRole="SalesOrder" ToRole="Invoice" />
     <NavigationProperty Name="ProductForSalesOrder" Relationship="ODataERPModel.SalesOrder_ProductForSalesOrders" FromRole="SalesOrder" ToRole="ProductForSalesOrder" />
   </EntityType>
   <Association Name="SalesOrder_Customer">
@@ -99,20 +85,6 @@
       </Principal>
       <Dependent Role="SalesOrder">
         <PropertyRef Name="CustomerID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="Invoice_SalesOrder">
-    <End Role="SalesOrder" Type="ODataERPModel.SalesOrder" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Invoice" Type="ODataERPModel.Invoice" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SalesOrder">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="Invoice">
-        <PropertyRef Name="SalesOrderID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

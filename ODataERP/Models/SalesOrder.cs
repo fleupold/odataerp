@@ -21,6 +21,8 @@ namespace ODataERP.Models
         public double Shipping { get; set; }
         public double Tax { get; set; }
         public double Total { get; set; }
+        public double AmountPaid { get; set; }
+        public int DunStatus { get; set; }
 
         public virtual ICollection<ProductForSalesOrder> ProductForSalesOrders { get; set; }
     }
