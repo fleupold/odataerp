@@ -9,7 +9,7 @@ namespace ODataERP.Models
     {
         public int ID { get; set; }
         public int Status { get; set; }
-        public decimal AmountPaid { get; set; }
+        public double AmountPaid { get; set; }
         public int SalesOrderID { get; set; }
         public virtual SalesOrder SalesOrder { get; set; }
     }

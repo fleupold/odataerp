@@ -43,7 +43,7 @@
     </Key>
     <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="Status" Type="int" Nullable="false" />
-    <Property Name="AmountPaid" Type="numeric" Nullable="false" Scale="2" />
+    <Property Name="AmountPaid" Type="float" Nullable="false" />
     <Property Name="SalesOrderID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Product">

@@ -4,14 +4,12 @@
 <div id="dialog"></div>
 <div class="tabs">
     <ul>
-        <li><a href="#create-sales-order">Create Sales Order</a></li>
-        <li><a href="#release-goods">Release Goods</a></li>
-        <li><a href="#post-goods-issue">Post Goods Issue</a></li>
-        <li><a href="#post-customer-invoice">Post Customer Invoice</a></li>
-        <li><a href="#dun-customer">Dun Customer</a></li>
-        <li><a href="#analytics">Analytics</a></li>
+        <li><a href="#create-sales-order-tab">Create Sales Order</a></li>
+        <li><a href="#change-status-tab">Change Status</a></li>
+        <li><a href="#dun-customer-tab">Dun Customer</a></li>
+        <li><a href="#analytics-tab">Analytics</a></li>
     </ul>
-    <div id="create-sales-order">
+    <div id="create-sales-order-tab">
         <h2>Create Sales Order</h2>
         <h3>General</h3>
         <table>
@@ -174,20 +172,20 @@
         </table>
         <button id="order-create"></button>
     </div>
-    <div id="release-goods">
-        <h2>Release Goods</h2>
+    <div id="change-status-tab">
+        <h2>Change Status</h2>
         <div>
             Status:
-            <select id="release-goods-status">
+            <select id="change-status">
                 <option value="0" selected="selected">releasable</option>
                 <option value="1">deliverable</option>
                 <option value="2">to be invoiced</option>
-                <option value="3">completed</option>
+                <option value="3">completable</option>
             </select>
             and find
-            <input type="text" id="release-goods-search" />
+            <input type="text" id="change-search" />
         </div>
-        <table id="release-goods-table">
+        <table id="change-table">
             <thead>
                 <tr>
                     <th>Oder ID</th>
@@ -199,18 +197,12 @@
             <tbody>
             </tbody>
         </table>
-        <button id="release-goods-button"></button>
+        <button id="change-button"></button>
     </div>
-    <div id="post-goods-issue">
-       <h2>Post Goods Issues</h2>
-    </div>
-    <div id="post-customer-invoice">
-       <h2>Post Customer Invoice</h2>
-    </div>
-    <div id="dun-customer">
+    <div id="dun-customer-tab">
        <h2>Dun Customer</h2>
     </div>
-    <div id="analytics">
+    <div id="analytics-tab">
        <h2>Analytics</h2>
     </div>
 </div>

@@ -495,7 +495,7 @@ namespace ODataERP
         /// <param name="status">Anfangswert der Eigenschaft Status.</param>
         /// <param name="amountPaid">Anfangswert der Eigenschaft AmountPaid.</param>
         /// <param name="salesOrderID">Anfangswert der Eigenschaft SalesOrderID.</param>
-        public static Invoice CreateInvoice(global::System.Int32 id, global::System.Int32 status, global::System.Decimal amountPaid, global::System.Int32 salesOrderID)
+        public static Invoice CreateInvoice(global::System.Int32 id, global::System.Int32 status, global::System.Double amountPaid, global::System.Int32 salesOrderID)
         {
             Invoice invoice = new Invoice();
             invoice.ID = id;
@@ -564,7 +564,7 @@ namespace ODataERP
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal AmountPaid
+        public global::System.Double AmountPaid
         {
             get
             {
@@ -579,8 +579,8 @@ namespace ODataERP
                 OnAmountPaidChanged();
             }
         }
-        private global::System.Decimal _AmountPaid;
-        partial void OnAmountPaidChanging(global::System.Decimal value);
+        private global::System.Double _AmountPaid;
+        partial void OnAmountPaidChanging(global::System.Double value);
         partial void OnAmountPaidChanged();
     
         /// <summary>

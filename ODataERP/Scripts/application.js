@@ -19,8 +19,7 @@ $(function () {
     $(".tabs").tabs({
         select: function (event, ui) {
             if (ui.index == 1) {
-                // release goods
-                reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+                reloadTable();
             }
         }
     });
@@ -58,7 +57,7 @@ $(function () {
         },
         label: "Add"
     });
-    $("#release-goods-button").button({
+    $("#change-button").button({
         icons: {
             primary: "ui-icon-arrowreturnthick-1-e"
         },
@@ -328,16 +327,16 @@ $(function () {
     });
 
     // tables
-    function readMoreData(url, arr, table, cb) {
+    function readMoreData(url, arr, cb) {
         OData.read({
             requestUri: url,
             recognizeDates: true
         }, function (data) {
             arr = arr.concat(data.results);
             if (data.__next) {
-                readMoreData(data.__next, arr, table, cb);
+                readMoreData(data.__next, arr, cb);
             } else {
-                return cb(table, arr);
+                return cb(arr);
             }
         });
     }
@@ -347,51 +346,94 @@ $(function () {
     }
 
     // reload table
-    function reloadTable(table, statusId, searchId) {
-        var status = $("#" + statusId).val();
-        var searchtext = $("#" + searchId).val();
+    function reloadTable() {
+        var status = $("#change-status").val();
+        var searchtext = $("#change-search").val();
         var url = document.location.href + "ODataERP.svc/SalesOrder?$expand=Customer&$filter=Status eq " + status + ((searchtext) ? " and indexof(Customer/Name, '" + searchtext + "') gt -1" : "");
 
-        readMoreData(url, [], table, redrawTable);
+        readMoreData(url, [], redrawTable);
     }
 
     var mapStatus = ["releasable", "deliverable", "to be invoiced", "completed"];
 
-    function redrawTable(table, arr) {
+    function redrawTable(arr) {
         var data = [];
         for (var i = 0; i < arr.length; i++) {
             data.push([arr[i].ID, mapStatus[arr[i].Status], usDate(arr[i].DeliveryDate), arr[i].Customer.Name]);
         }
-        table.fnClearTable();
-        table.fnAddData(data);
+        changeTable.fnClearTable();
+        changeTable.fnAddData(data);
 
     }
 
-    // release goods
-    var releaseGoodsTable = $('#release-goods-table').dataTable();
+    // release goods + post goods issues + invoice
+    var changeTable = $('#change-table').dataTable();
 
-    $('#release-goods-table tr').live("click", function () {
+    $('#change-table tr').live("click", function () {
         $(this).toggleClass('row_selected');
     });
 
-    $("#release-goods-status").change(function () {
-        reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+    $("#change-status").change(function () {
+        var currentStatus = parseInt($("#change-status").val());
+        var label = null;
+        if (currentStatus == 0) {
+            label = "Release"
+        }
+        else if (currentStatus == 1) {
+            label = "Deliver"
+        }
+        else if (currentStatus == 2) {
+            label = "Invoice"
+        }
+        else if (currentStatus == 3) {
+            label = "Complete"
+        }
+
+        $("#change-button").button({
+            icons: {
+                primary: "ui-icon-arrowreturnthick-1-e"
+            },
+            label: label,
+            disabled: ((currentStatus == 3) ? true : false)
+        });
+
+        reloadTable();
     });
 
-    $("#release-goods-search").keyup(function () {
-        reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+    $("#change-search").keyup(function () {
+        reloadTable();
     })
 
-    $("#release-goods-button").click(function () {
-        $.each($('#release-goods-table tr.row_selected'), function (index_tr, tr) {
+    $("#change-button").click(function () {
+        $.each($('#change-table tr.row_selected'), function (index_tr, tr) {
             var salesOrderId = parseInt($("td:first", tr).html());
+            var currentStatus = parseInt($("#change-status").val());
             OData.request({
                 requestUri: document.location.href + "ODataERP.svc/SalesOrder(" + salesOrderId + ")/Status/$value",
                 method: "PUT",
                 headers: { "Content-Type": "text/plain" },
-                data: 1
+                data: currentStatus + 1
             }, function success(data, response) {
-                reloadTable(releaseGoodsTable, "release-goods-status", "release-goods-search");
+                reloadTable();
+                if (currentStatus == 2) {
+                    // create invoice
+                    OData.request(
+                      { requestUri: document.location.href + "ODataERP.svc/Invoice",
+                          method: "POST",
+                          data: {
+                              Status: 0,
+                              AmountPaid: 0,
+                              SalesOrderID: salesOrderId
+                          }
+                      },
+                      function (data) {
+                        // pass
+                      },
+                      function (err) {
+                          console.log(err);
+                      }
+                    );
+                }
             }, function errorr(err) {
                 console.log(err);
             });
