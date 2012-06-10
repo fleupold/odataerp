@@ -316,13 +316,15 @@ $(function () {
                   method: "POST",
                   data: {
                       Name: $("#new-customer-name").val(),
-                      City: $("#new-customer-city").val(),
-                      Discount: parseInt($("#new-customer-discount").val()),
-                      Country: $("#new-customer-country").val(),
-                      State: $("#new-customer-state").val(),
-                      Zip: $("#new-customer-zip").val(),
                       Street: $("#new-customer-street").val(),
-                      Phone: $("#new-customer-phone").val()
+                      StreetNo: $("#new-customer-streetno").val(),
+                      Zip: $("#new-customer-zip").val(),
+                      City: $("#new-customer-city").val(),
+                      Firstname: $("#new-customer-firstname").val(),
+                      Lastname: $("#new-customer-lastname").val(),
+                      Phone: $("#new-customer-phone").val(),
+                      Email: $("#new-customer-email").val(),
+                      Discount: parseInt($("#new-customer-discount").val())
                   }
               },
               function (data) {
@@ -331,6 +333,14 @@ $(function () {
                   $("#customer-name").val($("#new-customer-name").val());
                   $("#new-customer-name").val("");
                   $("#new-customer-city").val("");
+                  $("#new-customer-street").val("");
+                  $("#new-customer-streetno").val("");
+                  $("#new-customer-zip").val("");
+                  $("#new-customer-city").val("");
+                  $("#new-customer-firstname").val("");
+                  $("#new-customer-lastname").val("");
+                  $("#new-customer-phone").val("");
+                  $("#new-customer-email").val("");
                   $("#create-new-customer").slideUp();
               },
               function (err) {
@@ -468,10 +478,10 @@ $(function () {
             var today = new Date();
             var diff = today - obj.DeliveryDate;
             var days = Math.round(diff / (1000 * 60 * 60 * 24));
-            if (days > obj.PaymentTerms) {
+            if (days > obj.PaymentTerms && obj.AmountPaid < obj.Total) {
                 return "dunnable"
             }
-            else { 
+            else {
                 return "on time"
             }
         }

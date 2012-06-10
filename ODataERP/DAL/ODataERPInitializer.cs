@@ -13,16 +13,16 @@ namespace ODataERP.DAL
         {
             var customers = new List<Customer>
             {
-                new Customer { ID = 1, Name = "Stefan George",   City = "Köln", Discount = 1 },
-                new Customer { ID = 2, Name = "Felix Leupold",   City = "Berlin", Discount = 2 },
-                new Customer { ID = 3, Name = "Marvin Killing",   City = "München", Discount = 1 },
-                new Customer { ID = 4, Name = "Christian Reß",   City = "Potsdam", Discount = 1 },
-                new Customer { ID = 5, Name = "Melanie Meyer",   City = "Köln", Discount = 3 },
-                new Customer { ID = 6, Name = "Stefan Maier",   City = "Dortmund", Discount = 1 },
-                new Customer { ID = 7, Name = "Peter George",   City = "Essen", Discount = 1 },
-                new Customer { ID = 8, Name = "Volker Stürmer",   City = "Berlin", Discount = 3 },
-                new Customer { ID = 9, Name = "Marcello Schmidt",   City = "Freiburg", Discount = 1 },
-                new Customer { ID = 10, Name = "Philipp Lehmann",   City = "Karlsruhe", Discount = 1 }
+                new Customer { ID = 1, Name = "Stefan George", Firstname = "Stefan", Lastname = "George", City = "Köln", Discount = 1 },
+                new Customer { ID = 2, Name = "Felix Leupold", Firstname = "Felix", Lastname = "Leupold",   City = "Berlin", Discount = 2 },
+                new Customer { ID = 3, Name = "Marvin Killing", Firstname = "Marvin", Lastname = "Killing",   City = "München", Discount = 1 },
+                new Customer { ID = 4, Name = "Christian Reß", Firstname = "Christian", Lastname = "Reß",   City = "Potsdam", Discount = 1 },
+                new Customer { ID = 5, Name = "Melanie Meyer", Firstname = "Melanie", Lastname = "Meyer",   City = "Köln", Discount = 3 },
+                new Customer { ID = 6, Name = "Stefan Maier", Firstname = "Stefan", Lastname = "Maier",   City = "Dortmund", Discount = 1 },
+                new Customer { ID = 7, Name = "Peter George", Firstname = "Peter", Lastname = "George",   City = "Essen", Discount = 1 },
+                new Customer { ID = 8, Name = "Volker Stürmer", Firstname = "Volker", Lastname = "Stürmer",   City = "Berlin", Discount = 3 },
+                new Customer { ID = 9, Name = "Marcello Schmidt", Firstname = "Marcello", Lastname = "Schmidt",   City = "Freiburg", Discount = 1 },
+                new Customer { ID = 10, Name = "Philipp Lehmann", Firstname = "Philipp", Lastname = "Lehmann",   City = "Karlsruhe", Discount = 1 }
             };
             customers.ForEach(s => context.Customers.Add(s));
             context.SaveChanges();

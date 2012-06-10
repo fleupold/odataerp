@@ -17,5 +17,7 @@ namespace ODataERP.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
+        public DbSet<Customer> Customer { get; set; }
     }
 }

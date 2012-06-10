@@ -25,12 +25,14 @@
     <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="Discount" Type="int" Nullable="false" />
     <Property Name="Name" Type="nvarchar" />
-    <Property Name="Country" Type="nvarchar" />
-    <Property Name="State" Type="nvarchar" />
-    <Property Name="City" Type="nvarchar" />
-    <Property Name="Zip" Type="nvarchar" />
     <Property Name="Street" Type="nvarchar" />
+    <Property Name="StreetNo" Type="nvarchar" />
+    <Property Name="Zip" Type="nvarchar" />
+    <Property Name="City" Type="nvarchar" />
+    <Property Name="Firstname" Type="nvarchar" />
+    <Property Name="Lastname" Type="nvarchar" />
     <Property Name="Phone" Type="nvarchar" />
+    <Property Name="Email" Type="nvarchar" />
   </EntityType>
   <EntityType Name="Product">
     <Key>
