@@ -47,6 +47,8 @@
           <Property Name="Name" Type="nvarchar" />
           <Property Name="Price" Type="numeric" Nullable="false" Scale="2" />
           <Property Name="Stock" Type="int" Nullable="false" />
+          <Property Name="Unit" Type="nvarchar" />
+          <Property Name="MonthlySupply" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ProductForSalesOrder">
           <Key>
@@ -165,6 +167,8 @@
           <Property Name="Name" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
           <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Stock" Type="Int32" Nullable="false" />
+          <Property Name="Unit" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="MonthlySupply" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ProductForSalesOrder" Relationship="ODataERPModel.ProductForSalesOrder_Product" FromRole="Product" ToRole="ProductForSalesOrder" />
         </EntityType>
         <EntityType Name="ProductForSalesOrder">
@@ -264,6 +268,8 @@
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="Price" ColumnName="Price" />
             <ScalarProperty Name="Stock" ColumnName="Stock" />
+            <ScalarProperty Name="Unit" ColumnName="Unit" />
+            <ScalarProperty Name="MonthlySupply" ColumnName="MonthlySupply" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ProductForSalesOrder"><EntityTypeMapping TypeName="ODataERPModel.ProductForSalesOrder"><MappingFragment StoreEntitySet="ProductForSalesOrder">
             <ScalarProperty Name="ID" ColumnName="ID" />
@@ -306,9 +312,9 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="ODataERP">
+      <Diagram Name="ODataERP" ZoomLevel="83">
         <EntityTypeShape EntityType="ODataERPModel.Customer" Width="1.5" PointX="0.75" PointY="1.25" Height="3.3263964843749996" IsExpanded="true" />
-        <EntityTypeShape EntityType="ODataERPModel.Product" Width="1.5" PointX="3" PointY="6" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="ODataERPModel.Product" Width="1.5" PointX="3" PointY="5.75" Height="2.3648893229166665" IsExpanded="true" />
         <EntityTypeShape EntityType="ODataERPModel.ProductForSalesOrder" Width="1.5" PointX="5.25" PointY="1.875" Height="2.1725878906249996" IsExpanded="true" />
         <EntityTypeShape EntityType="ODataERPModel.SalesOrder" Width="1.5" PointX="3" PointY="1" Height="3.9033007812499996" IsExpanded="true" />
         <AssociationConnector Association="ODataERPModel.SalesOrder_Customer" ManuallyRouted="false">
@@ -316,8 +322,8 @@
           <ConnectorPoint PointX="3" PointY="2.9131982421875" />
         </AssociationConnector>
         <AssociationConnector Association="ODataERPModel.ProductForSalesOrder_Product" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="6.9901432291666667" />
-          <ConnectorPoint PointX="6" PointY="6.9901432291666667" />
+          <ConnectorPoint PointX="4.5" PointY="6.9324446614583337" />
+          <ConnectorPoint PointX="6" PointY="6.9324446614583337" />
           <ConnectorPoint PointX="6" PointY="4.047587890625" />
         </AssociationConnector>
         <AssociationConnector Association="ODataERPModel.SalesOrder_ProductForSalesOrders" ManuallyRouted="false">

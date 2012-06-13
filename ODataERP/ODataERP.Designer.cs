@@ -517,12 +517,14 @@ namespace ODataERP
         /// <param name="id">Anfangswert der Eigenschaft ID.</param>
         /// <param name="price">Anfangswert der Eigenschaft Price.</param>
         /// <param name="stock">Anfangswert der Eigenschaft Stock.</param>
-        public static Product CreateProduct(global::System.Int32 id, global::System.Decimal price, global::System.Int32 stock)
+        /// <param name="monthlySupply">Anfangswert der Eigenschaft MonthlySupply.</param>
+        public static Product CreateProduct(global::System.Int32 id, global::System.Decimal price, global::System.Int32 stock, global::System.Int32 monthlySupply)
         {
             Product product = new Product();
             product.ID = id;
             product.Price = price;
             product.Stock = stock;
+            product.MonthlySupply = monthlySupply;
             return product;
         }
 
@@ -627,6 +629,54 @@ namespace ODataERP
         private global::System.Int32 _Stock;
         partial void OnStockChanging(global::System.Int32 value);
         partial void OnStockChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Unit
+        {
+            get
+            {
+                return _Unit;
+            }
+            set
+            {
+                OnUnitChanging(value);
+                ReportPropertyChanging("Unit");
+                _Unit = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Unit");
+                OnUnitChanged();
+            }
+        }
+        private global::System.String _Unit;
+        partial void OnUnitChanging(global::System.String value);
+        partial void OnUnitChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 MonthlySupply
+        {
+            get
+            {
+                return _MonthlySupply;
+            }
+            set
+            {
+                OnMonthlySupplyChanging(value);
+                ReportPropertyChanging("MonthlySupply");
+                _MonthlySupply = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("MonthlySupply");
+                OnMonthlySupplyChanged();
+            }
+        }
+        private global::System.Int32 _MonthlySupply;
+        partial void OnMonthlySupplyChanging(global::System.Int32 value);
+        partial void OnMonthlySupplyChanged();
 
         #endregion
     

@@ -1,0 +1,5 @@
+* Create Sales Order: https://pidoco.com/rabbit/api/prototypes/63655/pages/page0001.xhtml?mode=sketched&api_key=JRYMN2taPrbNB8YmL8ezEPp0BhdhnRnuXyasdNT6
+* Release Goods: https://pidoco.com/rabbit/api/prototypes/63655/pages/page8303.xhtml?mode=sketched&api_key=JRYMN2taPrbNB8YmL8ezEPp0BhdhnRnuXyasdNT6
+* Post Goods Issue: https://pidoco.com/rabbit/api/prototypes/63655/pages/page4850.xhtml?mode=sketched&api_key=JRYMN2taPrbNB8YmL8ezEPp0BhdhnRnuXyasdNT6
+* Post Customer Invoice: https://pidoco.com/rabbit/api/prototypes/63655/pages/page8054.xhtml?mode=sketched&api_key=JRYMN2taPrbNB8YmL8ezEPp0BhdhnRnuXyasdNT6
+* Dun Customer: tbd

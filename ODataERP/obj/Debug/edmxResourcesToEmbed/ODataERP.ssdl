@@ -42,6 +42,8 @@
     <Property Name="Name" Type="nvarchar" />
     <Property Name="Price" Type="numeric" Nullable="false" Scale="2" />
     <Property Name="Stock" Type="int" Nullable="false" />
+    <Property Name="Unit" Type="nvarchar" />
+    <Property Name="MonthlySupply" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="ProductForSalesOrder">
     <Key>

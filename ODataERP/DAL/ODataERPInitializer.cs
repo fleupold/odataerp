@@ -29,16 +29,16 @@ namespace ODataERP.DAL
 
             var products = new List<Product>
             {
-                new Product { ID = 1, Name = "Saft", Price = 0.99M, Stock = 10 },
-                new Product { ID = 2, Name = "Bier", Price = 2.99M, Stock = 4 },
-                new Product { ID = 3, Name = "Brot", Price = 0.99M, Stock = 8 },
-                new Product { ID = 4, Name = "Fleisch", Price = 3.99M, Stock = 14 },
-                new Product { ID = 5, Name = "Müsli", Price = 1.99M, Stock = 4 },
-                new Product { ID = 6, Name = "Milch", Price = 0.99M, Stock = 20 },
-                new Product { ID = 7, Name = "Schokolade", Price = 0.99M, Stock = 9 },
-                new Product { ID = 8, Name = "Chips", Price = 0.99M, Stock = 6 },
-                new Product { ID = 9, Name = "Pizza", Price = 0.99M, Stock = 7 },
-                new Product { ID = 10, Name = "Wurst", Price = 0.99M, Stock = 8 }
+                new Product { ID = 1, Name = "Saft", Price = 0.99M, Stock = 10, Unit = "ea", MonthlySupply = 10 },
+                new Product { ID = 2, Name = "Bier", Price = 2.99M, Stock = 4, Unit = "kg", MonthlySupply = 10 },
+                new Product { ID = 3, Name = "Brot", Price = 0.99M, Stock = 8, Unit = "kg", MonthlySupply = 10 },
+                new Product { ID = 4, Name = "Fleisch", Price = 3.99M, Stock = 14, Unit = "kg", MonthlySupply = 10 },
+                new Product { ID = 5, Name = "Müsli", Price = 1.99M, Stock = 4, Unit = "kg", MonthlySupply = 10 },
+                new Product { ID = 6, Name = "Milch", Price = 0.99M, Stock = 20, Unit = "ea", MonthlySupply = 10 },
+                new Product { ID = 7, Name = "Schokolade", Price = 0.99M, Stock = 9, Unit = "ea", MonthlySupply = 10 },
+                new Product { ID = 8, Name = "Chips", Price = 0.99M, Stock = 6, Unit = "ea", MonthlySupply = 10 },
+                new Product { ID = 9, Name = "Pizza", Price = 0.99M, Stock = 7, Unit = "ea", MonthlySupply = 10 },
+                new Product { ID = 10, Name = "Wurst", Price = 0.99M, Stock = 8, Unit = "ea", MonthlySupply = 10 }
             };
             products.ForEach(s => context.Products.Add(s));
             context.SaveChanges();
