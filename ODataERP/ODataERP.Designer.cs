@@ -938,6 +938,7 @@ namespace ODataERP
         /// <param name="priority">Anfangswert der Eigenschaft Priority.</param>
         /// <param name="status">Anfangswert der Eigenschaft Status.</param>
         /// <param name="customerID">Anfangswert der Eigenschaft CustomerID.</param>
+        /// <param name="created">Anfangswert der Eigenschaft Created.</param>
         /// <param name="netValue">Anfangswert der Eigenschaft NetValue.</param>
         /// <param name="discount">Anfangswert der Eigenschaft Discount.</param>
         /// <param name="shipping">Anfangswert der Eigenschaft Shipping.</param>
@@ -945,7 +946,8 @@ namespace ODataERP
         /// <param name="total">Anfangswert der Eigenschaft Total.</param>
         /// <param name="amountPaid">Anfangswert der Eigenschaft AmountPaid.</param>
         /// <param name="dunStatus">Anfangswert der Eigenschaft DunStatus.</param>
-        public static SalesOrder CreateSalesOrder(global::System.Int32 id, global::System.DateTime deliveryDate, global::System.Int32 paymentTerms, global::System.Int32 priority, global::System.Int32 status, global::System.Int32 customerID, global::System.Double netValue, global::System.Double discount, global::System.Double shipping, global::System.Double tax, global::System.Double total, global::System.Double amountPaid, global::System.Int32 dunStatus)
+        /// <param name="invoiced">Anfangswert der Eigenschaft Invoiced.</param>
+        public static SalesOrder CreateSalesOrder(global::System.Int32 id, global::System.DateTime deliveryDate, global::System.Int32 paymentTerms, global::System.Int32 priority, global::System.Int32 status, global::System.Int32 customerID, global::System.DateTime created, global::System.Double netValue, global::System.Double discount, global::System.Double shipping, global::System.Double tax, global::System.Double total, global::System.Double amountPaid, global::System.Int32 dunStatus, global::System.DateTime invoiced)
         {
             SalesOrder salesOrder = new SalesOrder();
             salesOrder.ID = id;
@@ -954,6 +956,7 @@ namespace ODataERP
             salesOrder.Priority = priority;
             salesOrder.Status = status;
             salesOrder.CustomerID = customerID;
+            salesOrder.Created = created;
             salesOrder.NetValue = netValue;
             salesOrder.Discount = discount;
             salesOrder.Shipping = shipping;
@@ -961,6 +964,7 @@ namespace ODataERP
             salesOrder.Total = total;
             salesOrder.AmountPaid = amountPaid;
             salesOrder.DunStatus = dunStatus;
+            salesOrder.Invoiced = invoiced;
             return salesOrder;
         }
 
@@ -1113,6 +1117,30 @@ namespace ODataERP
         private global::System.Int32 _CustomerID;
         partial void OnCustomerIDChanging(global::System.Int32 value);
         partial void OnCustomerIDChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Created
+        {
+            get
+            {
+                return _Created;
+            }
+            set
+            {
+                OnCreatedChanging(value);
+                ReportPropertyChanging("Created");
+                _Created = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Created");
+                OnCreatedChanged();
+            }
+        }
+        private global::System.DateTime _Created;
+        partial void OnCreatedChanging(global::System.DateTime value);
+        partial void OnCreatedChanged();
     
         /// <summary>
         /// Keine Dokumentation für Metadaten verfügbar.
@@ -1281,6 +1309,30 @@ namespace ODataERP
         private global::System.Int32 _DunStatus;
         partial void OnDunStatusChanging(global::System.Int32 value);
         partial void OnDunStatusChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime Invoiced
+        {
+            get
+            {
+                return _Invoiced;
+            }
+            set
+            {
+                OnInvoicedChanging(value);
+                ReportPropertyChanging("Invoiced");
+                _Invoiced = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Invoiced");
+                OnInvoicedChanged();
+            }
+        }
+        private global::System.DateTime _Invoiced;
+        partial void OnInvoicedChanging(global::System.DateTime value);
+        partial void OnInvoicedChanged();
 
         #endregion
     

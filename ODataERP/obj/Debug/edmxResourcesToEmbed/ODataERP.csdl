@@ -68,6 +68,7 @@
     <Property Name="Priority" Type="Int32" Nullable="false" />
     <Property Name="Status" Type="Int32" Nullable="false" />
     <Property Name="CustomerID" Type="Int32" Nullable="false" />
+    <Property Name="Created" Type="DateTime" Nullable="false" />
     <Property Name="NetValue" Type="Double" Nullable="false" />
     <Property Name="Discount" Type="Double" Nullable="false" />
     <Property Name="Shipping" Type="Double" Nullable="false" />
@@ -75,6 +76,7 @@
     <Property Name="Total" Type="Double" Nullable="false" />
     <Property Name="AmountPaid" Type="Double" Nullable="false" />
     <Property Name="DunStatus" Type="Int32" Nullable="false" />
+    <Property Name="Invoiced" Type="DateTime" Nullable="false" />
     <NavigationProperty Name="Customer" Relationship="ODataERPModel.SalesOrder_Customer" FromRole="SalesOrder" ToRole="Customer" />
     <NavigationProperty Name="ProductForSalesOrder" Relationship="ODataERPModel.SalesOrder_ProductForSalesOrders" FromRole="SalesOrder" ToRole="ProductForSalesOrder" />
   </EntityType>

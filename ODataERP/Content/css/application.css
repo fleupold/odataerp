@@ -14,3 +14,26 @@
     height:10px;
 }
 
+.edit-customer{
+    cursor:pointer;
+}
+
+.delete-customer{
+    cursor:pointer;
+}
+
+.edit-product{
+    cursor:pointer;
+}
+
+.delete-product{
+    cursor:pointer;
+}
+
+.edit-sales-order{
+    cursor:pointer;
+}
+
+.delete-sales-order{
+    cursor:pointer;
+}

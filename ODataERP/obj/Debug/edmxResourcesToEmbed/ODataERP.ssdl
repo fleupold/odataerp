@@ -64,6 +64,7 @@
     <Property Name="Priority" Type="int" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="CustomerID" Type="int" Nullable="false" />
+    <Property Name="Created" Type="datetime" Nullable="false" />
     <Property Name="NetValue" Type="float" Nullable="false" />
     <Property Name="Discount" Type="float" Nullable="false" />
     <Property Name="Shipping" Type="float" Nullable="false" />
@@ -71,6 +72,7 @@
     <Property Name="Total" Type="float" Nullable="false" />
     <Property Name="AmountPaid" Type="float" Nullable="false" />
     <Property Name="DunStatus" Type="int" Nullable="false" />
+    <Property Name="Invoiced" Type="datetime" Nullable="false" />
   </EntityType>
   <Association Name="ProductForSalesOrder_Product">
     <End Role="Product" Type="ODataERPModel.Store.Product" Multiplicity="1">

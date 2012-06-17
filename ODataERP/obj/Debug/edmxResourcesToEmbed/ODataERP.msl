@@ -49,6 +49,7 @@
           <ScalarProperty Name="Priority" ColumnName="Priority" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
           <ScalarProperty Name="NetValue" ColumnName="NetValue" />
           <ScalarProperty Name="Discount" ColumnName="Discount" />
           <ScalarProperty Name="Shipping" ColumnName="Shipping" />
@@ -56,6 +57,7 @@
           <ScalarProperty Name="Total" ColumnName="Total" />
           <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
           <ScalarProperty Name="DunStatus" ColumnName="DunStatus" />
+          <ScalarProperty Name="Invoiced" ColumnName="Invoiced" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

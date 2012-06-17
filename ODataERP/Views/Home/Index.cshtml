@@ -4,13 +4,17 @@
 <div id="dialog"></div>
 <div class="tabs">
     <ul>
-        <li><a href="#create-sales-order-tab">Create Sales Order</a></li>
+        <li><a href="#crud-sales-order-tab">Sales Order</a></li>
+        <li><a href="#crud-customer-tab">Customer</a></li>
+        <li><a href="#crud-product-tab">Product</a></li>
         <li><a href="#change-status-tab">Change Status</a></li>
         <li><a href="#dun-customer-tab">Dun Customer</a></li>
         <li><a href="#analytics-tab">Analytics</a></li>
     </ul>
-    <div id="create-sales-order-tab">
-        <h2>Create Sales Order</h2>
+    <div id="crud-sales-order-tab">
+        <h2>Sales Order</h2>
+        Sales Orders:
+        <ul id="sales-order-list"></ul>
         <h3>General</h3>
         <table>
             <tr>
@@ -180,6 +184,78 @@
         </table>
         <button id="order-create"></button>
     </div>
+    <div id="crud-customer-tab">
+       <h2>CRUD Customer</h2>
+       Customers:
+       <ul id="customer-list"></ul>
+       <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" id="crud-customer-name" /></td>
+        </tr>
+        <tr>
+            <td>Street:</td>
+            <td><input type="text" id="crud-customer-street" /></td>
+        </tr>
+        <tr>
+            <td>Street No:</td>
+            <td><input type="text" id="crud-customer-streetno" /></td>
+        </tr>
+        <tr>
+            <td>Zip:</td>
+            <td><input type="text" id="crud-customer-zip" /></td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td><input type="text" id="crud-customer-city" /></td>
+        </tr>
+        <tr>
+            <td>Firstname:</td>
+            <td><input type="text" id="crud-customer-firstname" /></td>
+        </tr>
+        <tr>
+            <td>Lastname:</td>
+            <td><input type="text" id="crud-customer-lastname" /></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td><input type="text" id="crud-customer-phone" /></td>
+        </tr>
+        <tr>
+            <td>E-Mail:</td>
+            <td><input type="text" id="crud-customer-email" /></td>
+        </tr>
+       </table>
+       <button id="crud-customer-new-button"></button><button id="crud-customer-button"></button>
+    </div>
+    <div id="crud-product-tab">
+       <h2>CRUD Product</h2>
+       Products:
+       <ul id="product-list"></ul>
+       <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" id="crud-prodcut-name" /></td>
+        </tr>
+        <tr>
+            <td>Price:</td>
+            <td><input type="text" id="crud-prodcut-price" /></td>
+        </tr>
+        <tr>
+            <td>Stock:</td>
+            <td><input type="text" id="crud-prodcut-stock" /></td>
+        </tr>
+        <tr>
+            <td>Unit:</td>
+            <td><input type="text" id="crud-prodcut-unit" /></td>
+        </tr>
+        <tr>
+            <td>Monthly supply:</td>
+            <td><input type="text" id="crud-prodcut-monthly-supply" /></td>
+        </tr>
+       </table>
+       <button id="crud-product-new-button"></button><button id="crud-product-button"></button>
+    </div>
     <div id="change-status-tab">
         <h2>Change Status</h2>
         <div>
@@ -233,11 +309,15 @@
             <td id="analytics-avg-duration"></td>
         </tr>
         <tr>
-            <td>Number of issued dunnings per prodcut:</td>
+            <td>Average number of issued dunnings per prodcut:</td>
             <td id="analytics-dpp"></td>
         </tr>
         <tr>
-            <td>Avg amount of orders:</td>
+            <td>Average number of issued dunnings per sales order:</td>
+            <td id="analytics-dps"></td>
+        </tr>
+        <tr>
+            <td>Average amount of orders:</td>
             <td id="analytics-avg-orders"></td>
         </tr>
        </table>

@@ -14,6 +14,7 @@ namespace ODataERP.Models
         public int Status { get; set; }
         public int CustomerID { get; set; }
         public virtual Customer Customer { get; set; }
+        public DateTime Created { get; set; }
 
         // info for invoice
         public double NetValue { get; set; }
@@ -23,6 +24,7 @@ namespace ODataERP.Models
         public double Total { get; set; }
         public double AmountPaid { get; set; }
         public int DunStatus { get; set; }
+        public DateTime Invoiced { get; set; }
 
         public virtual ICollection<ProductForSalesOrder> ProductForSalesOrders { get; set; }
     }

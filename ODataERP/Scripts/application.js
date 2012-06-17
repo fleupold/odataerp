@@ -14,17 +14,55 @@ $(function () {
         new_quantity: 1,
         products: []
     }
-
+    
+    // helper
+    function usDate(dateObject) {
+        return dateObject.getMonth() + 1 + "/" + dateObject.getDate() + "/" + dateObject.getFullYear();
+    }
+    
+    function showDialog(title, message, ok_func) {
+        if (!ok_func) {
+            ok_func = function () {
+                $(this).dialog("close");
+            }
+        }
+        $("#dialog").html(message);
+        $("#dialog").dialog({
+            modal: true,
+            buttons: {
+                Ok: ok_func
+            },
+            title: title
+        });
+    }
+    
+    function checkEmail(email) {
+        var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!filter.test(email)) {
+            return false;
+        }
+        return true;
+    }
+    
     // tabs
     $(".tabs").tabs({
         select: function (event, ui) {
-            if (ui.index == 1) {
-                reloadTable();
+            if (ui.index == 0) {
+                reloadSalesOrder();
+            }
+            else if (ui.index == 1) {
+                reloadCustomer();
             }
             else if (ui.index == 2) {
-                reloadDunTable();
+                reloadProduct();
             }
             else if (ui.index == 3) {
+                reloadTable();
+            }
+            else if (ui.index == 4) {
+                reloadDunTable();
+            }
+            else if (ui.index == 5) {
                 reloadAnalytics();
             }
         }
@@ -36,7 +74,7 @@ $(function () {
         icons: {
             primary: "ui-icon-arrowreturnthick-1-e"
         },
-        label: "Create Sales Order"
+        label: "Submit Sales Order"
     });
     $("#order-atp-check").button({
         disabled: true,
@@ -75,7 +113,44 @@ $(function () {
         },
         label: "Dun"
     });
-
+    $("#crud-product-button").button({
+        icons: {
+            primary: "ui-icon-arrowreturnthick-1-e"
+        },
+        label: "Submit Product"
+    });
+    $("#crud-product-new-button").button({
+        icons: {
+            primary: "ui-icon-plus"
+        },
+        label: "New Product"
+    });
+    $("#crud-customer-button").button({
+        icons: {
+            primary: "ui-icon-arrowreturnthick-1-e"
+        },
+        label: "Submit Customer"
+    });
+    $("#crud-customer-new-button").button({
+        icons: {
+            primary: "ui-icon-plus"
+        },
+        label: "New Customer"
+    });
+    
+    // sales order
+    function reloadSalesOrder() {
+        var url = document.location.href + "ODataERP.svc/SalesOrder?$expand=Customer";
+        readMoreData(url, [], redrawSalesOrder);
+    }
+    
+    function redrawSalesOrder(salesorders) {
+        $("#sales-order-list").html("");
+        for (var i = 0; i < salesorders.length; i++) {
+            $("#sales-order-list").append("<li id='sales-order-" + salesorders[i].ID + "'>" + salesorders[i].Customer.Name + " (" + usDate(salesorders[i].DeliveryDate) + ") <span class='edit-sales-order'>[Edit]</span> <span class='delete-sales-order'>[Delete]</span></li>");
+        }
+    }
+    
     // oder delivery datepicker
     $("#order-delivery-date").datepicker({
         showOn: "button",
@@ -141,23 +216,7 @@ $(function () {
         var price = (so.new_product.Price * so.new_quantity).toFixed(2);
         $("#order-item-price").html(String(price).replace(".", ","));
     });
-
-    function showDialog(title, message, ok_func) {
-        if (!ok_func) {
-            ok_func = function () {
-                $(this).dialog("close");
-            }
-        }
-        $("#dialog").html(message);
-        $("#dialog").dialog({
-            modal: true,
-            buttons: {
-                Ok: ok_func
-            },
-            title: title
-        });
-    }
-
+    
     function updateTable() {
         // num rows
         for (var i = 0; i < $(".item-row").length; i++) {
@@ -362,12 +421,11 @@ $(function () {
             } else {
                 return cb(arr);
             }
+        }, function(err) {
+            console.log(err)
         });
     }
 
-    function usDate(dateObject) {
-        return dateObject.getMonth() + 1 + "/" + dateObject.getDate() + "/" + dateObject.getFullYear();
-    }
 
     // reload table
     function reloadTable() {
@@ -457,7 +515,7 @@ $(function () {
                       }
                     );
                 }
-            }, function errorr(err) {
+            }, function (err) {
                 console.log(err);
             });
         });
@@ -509,7 +567,7 @@ $(function () {
                     requestUri: document.location.href + "ODataERP.svc/SalesOrder(" + salesOrderId + ")/DunStatus/$value",
                     method: "PUT",
                     headers: { "Content-Type": "text/plain" },
-                    data: 1
+                    data: 2
                 }, function success(data, response) {
                     reloadDunTable();
                 }, function errorr(err) {
@@ -518,11 +576,251 @@ $(function () {
             }
         });
     });
-
+    
+    // CRUD Customer
+    var customer = {};
+    
+    function reloadCustomer() {
+        var url = document.location.href + "ODataERP.svc/Customer";
+        readMoreData(url, [], redrawCustomer);
+    }
+    
+    function redrawCustomer(customers) {
+        $("#customer-list").html("");
+        for (var i = 0; i < customers.length; i++) {
+            $("#customer-list").append("<li id='customer-" + customers[i].ID + "'>" + customers[i].Name + " <span class='edit-customer'>[Edit]</span> <span class='delete-customer'>[Delete]</span></li>");
+        }
+    }
+    
+    $(".edit-customer").live("click", function(){
+        var id = $(this).parent().attr("id");
+        OData.request({
+                requestUri: document.location.href + "ODataERP.svc/Customer(" + id.substr(9) + ")",
+                method: "GET"
+            }, 
+            function success(data) {
+                customer = data;
+                $("#crud-customer-name").val(customer.Name);
+                $("#crud-customer-street").val(customer.Street);
+                $("#crud-customer-streetno").val(customer.StreetNo);
+                $("#crud-customer-zip").val(customer.Zip);
+                $("#crud-customer-city").val(customer.City);
+                $("#crud-customer-firstname").val(customer.Firstname);
+                $("#crud-customer-lastname").val(customer.Lastname);
+                $("#crud-customer-phone").val(customer.Phone);
+                $("#crud-customer-email").val(customer.Email);
+            }, 
+            function (err) {
+                console.log(err);
+            }
+        );
+    });
+    
+    $("#crud-customer-button").click(function(){
+        customer.Name = $("#crud-customer-name").val();
+        customer.Street = $("#crud-customer-street").val();
+        customer.StreetNo = $("#crud-customer-streetno").val();
+        customer.Zip = $("#crud-customer-zip").val();
+        customer.City = $("#crud-customer-city").val();
+        customer.Firstname = $("#crud-customer-firstname").val();
+        customer.Lastname = $("#crud-customer-lastname").val();
+        customer.Phone = $("#crud-customer-phone").val();
+        customer.Email = $("#crud-customer-email").val();
+        
+        var error = null;
+        if (!customer.Name)
+            error = "You have to enter a customer name!";
+        else if (!customer.City)
+            error = "You have to enter a customer city!";
+        else if (customer.Email && !checkEmail(customer.Email))
+            error = "Your email address has to be in the right format!"
+        if (error) {
+            showDialog("Error", error);
+        }
+        else {
+            OData.request({
+                    requestUri: (document.location.href + "ODataERP.svc/Customer") + ((customer.ID)? "(" + customer.ID + ")" : ""),
+                    method: customer.ID ? "PUT" : "POST",
+                    data:customer
+                }, 
+                function success(data) {
+                    if (!customer.ID) {
+                        customer = data
+                    }
+                    reloadCustomer();
+                    showDialog("Customer", "Customer was successfully updated.");
+                }, 
+                function (err) {
+                    console.log(err);
+                }
+            );
+        }
+    });
+    
+    $(".delete-customer").live("click", function(){
+        var id = $(this).parent().attr("id");
+        OData.request({
+                requestUri: document.location.href + "ODataERP.svc/Customer(" + id.substr(9) + ")",
+                method: "DELETE"
+            }, 
+            function success(data, response) {
+                reloadCustomer();
+            }, 
+            function (err) {
+                console.log(err);
+            }
+        );
+        $("li[id=" + id + "]").remove();
+    });
+    
+    $("#crud-customer-new-button").click(function(){
+        customer = {};
+        $("#crud-customer-name").val("");
+        $("#crud-customer-street").val("");
+        $("#crud-customer-streetno").val("");
+        $("#crud-customer-zip").val("");
+        $("#crud-customer-city").val("");
+        $("#crud-customer-firstname").val("");
+        $("#crud-customer-lastname").val("");
+        $("#crud-customer-phone").val("");
+        $("#crud-customer-email").val("");
+    });
+    
+    // CRUD Product
+    var product = {};
+    
+    function reloadProduct() {
+        var url = document.location.href + "ODataERP.svc/Product";
+        readMoreData(url, [], redrawProduct);
+    }
+    
+    function redrawProduct(products) {
+        $("#product-list").html("");
+        for (var i = 0; i < products.length; i++) {
+            $("#product-list").append("<li id='product-" + products[i].ID + "'>" + products[i].Name + " <span class='edit-product'>[Edit]</span> <span class='delete-product'>[Delete]</span></li>");
+        }
+    }
+    
+    $(".edit-product").live("click", function(){
+        var id = $(this).parent().attr("id");
+        OData.request({
+                requestUri: document.location.href + "ODataERP.svc/Product(" + id.substr(8) + ")",
+                method: "GET"
+            },
+            function success(data) {
+                product = data;
+                $("#crud-prodcut-name").val(product.Name);
+                $("#crud-prodcut-price").val(product.Price);
+                $("#crud-prodcut-stock").val(product.Stock);
+                $("#crud-prodcut-unit").val(product.Unit);
+                $("#crud-prodcut-monthly-supply").val(product.MonthlySupply);
+            }, 
+            function (err) {
+                console.log(err);
+            }
+        );
+    });
+    
+    $("#crud-product-button").click(function(){
+        product.Name = $("#crud-prodcut-name").val();
+        product.Price = parseFloat($("#crud-prodcut-price").val());
+        product.Stock = parseInt($("#crud-prodcut-stock").val());
+        product.Unit = $("#crud-prodcut-unit").val();
+        product.MonthlySupply = parseInt($("#crud-prodcut-monthly-supply").val());
+        
+        var error = null;
+        if (!product.Name)
+            error = "You have to enter a product name!";
+        else if (!product.Price)
+            error = "You have to enter a product price!";
+        else if (product.Price < 0)
+            error = "Price cannot be negative!";
+        else if (!product.Stock)
+            error = "You have to enter a product stock!";
+        else if (!product.Unit)
+            error = "You have to enter a product unit!";
+        else if (!product.MonthlySupply)
+            error = "You have to enter a product monthly supply!";
+        if (error) {
+            showDialog("Error", error);
+        }
+        else {
+            OData.request({
+                    requestUri: (document.location.href + "ODataERP.svc/Product") + ((product.ID)? "(" + product.ID + ")" : ""),
+                    method: product.ID ? "PUT" : "POST",
+                    data:product
+                }, 
+                function success(data) {
+                    if (!product.ID) {
+                        product = data
+                    }
+                    reloadCustomer();
+                    showDialog("Product", "Product was successfully updated.");
+                }, 
+                function (err) {
+                    console.log(err);
+                }
+            );
+        }
+    });
+    
+    $(".delete-product").live("click", function(){
+        var id = $(this).parent().attr("id");
+        OData.request({
+                requestUri: document.location.href + "ODataERP.svc/Product(" + id.substr(9) + ")",
+                method: "DELETE"
+            }, 
+            function success(data) {
+                reloadProduct();
+            }, 
+            function (err) {
+                console.log(err);
+            }
+        );
+        $("li[id=" + id + "]").remove();
+    });
+    
+    $("#crud-product-new-button").click(function(){
+        product = {};
+        $("#crud-prodcut-name").val("");
+        $("#crud-prodcut-price").val("");
+        $("#crud-prodcut-stock").val("");
+        $("#crud-prodcut-unit").val("");
+        $("#crud-prodcut-monthly-supply").val("");
+    });
+    
     // analytics
     function reloadAnalytics() {
-        $("#analytics-avg-duration").html("?");
-        $("#analytics-dpp").html("?");
-        $("#analytics-avg-orders").html("?");
+        readMoreData(document.location.href + "ODataERP.svc/SalesOrder", [], analyticsSalesOrders);
     }
+    
+    function analyticsSalesOrders(arr) {
+        var duration_tot = 0;
+        var duration_count = 0;
+        var amount_tot = 0;
+        var sales_order_count = 0;
+        var customers = [];
+        var dunned = 0;
+        for (var i=0; i<arr.length; i++) {
+            if(arr[i].Created && arr[i].Invoiced) {
+                duration_tot += arr[i].Invoiced - arr[i].Created;
+                duration_count += 1;
+            }
+            if(!$.inArray(arr[i].Customer, customers)) {
+                customers.push(arr[i].Customer);
+            }
+            if(arr[i].DunStatus == 1) {
+                dunned += 1;
+            }
+            amount_tot += arr[i].Total;
+            sales_order_count += 1;
+        }
+        $("#analytics-avg-duration").html(String(Math.round(duration_tot / (1000 * 60 * 60 * 24))/duration_count) + " days");
+        $("#analytics-avg-orders").html((sales_order_count?amount_tot/sales_order_count:0) + "&euro;");
+        $("#analytics-dpp").html(customers.length?dunned/customers.length:0);
+        $("#analytics-dps").html(sales_order_count?dunned/sales_order_count:0);
+    }
+    
+    // init
+    reloadSalesOrder();
 });

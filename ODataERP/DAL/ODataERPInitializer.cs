@@ -7,7 +7,7 @@ using ODataERP.Models;
 
 namespace ODataERP.DAL
 {
-    public class ODataERPInitializer : DropCreateDatabaseIfModelChanges<ODataERPContext>
+    public class ODataERPInitializer : CreateDatabaseIfNotExists<ODataERPContext>
     {
         protected override void Seed(ODataERPContext context)
         {
@@ -45,10 +45,10 @@ namespace ODataERP.DAL
             
             var salesorders = new List<SalesOrder>
             {
-                new SalesOrder { ID = 1, CustomerID = 1, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 14, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=0},
-                new SalesOrder { ID = 2, CustomerID = 1, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 14, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=0},
-                new SalesOrder { ID = 3, CustomerID = 2, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 30, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=0},
-                new SalesOrder { ID = 4, CustomerID = 3, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 30, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=0}
+                new SalesOrder { ID = 1, CustomerID = 1, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 14, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=0, Created = DateTime.Parse("2005-04-01"), Invoiced = DateTime.Parse("2005-10-01")},
+                new SalesOrder { ID = 2, CustomerID = 1, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 14, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=1, Created = DateTime.Parse("2005-03-01"), Invoiced = DateTime.Parse("2005-10-01")},
+                new SalesOrder { ID = 3, CustomerID = 2, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 30, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=1, Created = DateTime.Parse("2005-04-01"), Invoiced = DateTime.Parse("2005-10-01")},
+                new SalesOrder { ID = 4, CustomerID = 3, Priority = 0, DeliveryDate = DateTime.Parse("2005-09-01"), PaymentTerms = 30, Status=0, Discount=0, NetValue=10.0, Shipping=5.0, Tax=10.0, Total=10.0, AmountPaid=0.0, DunStatus=0, Created = DateTime.Parse("2005-09-01"), Invoiced = DateTime.Parse("2005-10-01")}
             };
             salesorders.ForEach(s => context.SalesOrders.Add(s));
             context.SaveChanges();
