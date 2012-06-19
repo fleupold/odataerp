@@ -414,7 +414,7 @@ $(function () {
             var requestData = { __batchRequests: 
                 [{ __changeRequests:
                     [
-                        { requestUri: "SalesOrder" + ((so.id)? "(" + so.id + ")":""), method: (so.id?"PUT":"POST"), headers: { "Content-ID": "1" },
+                        { requestUri: "SalesOrder" + ((so.id)? "(" + so.id + ")":""), method: (so.id?"PUT":"POST"), headers: { "Content-ID": "1" }, recognizeDates: true,
                             data: {
                                 CustomerID: so.customer,
                                 DeliveryDate: $("#order-delivery-date").datepicker("getDate"),
@@ -429,7 +429,7 @@ $(function () {
                                 AmountPaid: 0.0,
                                 DunStatus: 0,
                                 Created: new Date(),
-                                Invoiced: null
+                                Invoiced: new Date()
                             }
                         }
                     ]
@@ -439,7 +439,7 @@ $(function () {
             if(so.id) {
                 for (var i=0; i<so.old_products.length; i++) {
                     var requestObject = {requestUri: "ProductForSalesOrder(" + so.old_products[i] + ")", method: "DELETE"};
-                    //requestData.__batchRequests[0].__changeRequests.push(requestObject)
+                    requestData.__batchRequests[0].__changeRequests.push(requestObject);
                 }
             }
             for (var i = 0; i < so.products.length; i++) {
@@ -447,12 +447,11 @@ $(function () {
                     requestUri: "ProductForSalesOrder", method: "POST", data: {
                         Quantity: so.products[i].quantity,
                         ProductID: so.products[i].product.ID,
-                        SalesOrderID: { __metadata: { uri: "$1"}}.ID
+                        SalesOrderID: (so.id?so.id:{ __metadata: { uri: "$1"}}.ID)
                     }
                 };
-                //requestData.__batchRequests[0].__changeRequests.push(requestObject)
+                requestData.__batchRequests[0].__changeRequests.push(requestObject)
             }
-            console.log(requestData)
             OData.request({
                     requestUri: document.location.href + "ODataERP.svc/$batch",
                     data: requestData,
@@ -461,7 +460,7 @@ $(function () {
                 function (data) {
                     so.id = data.id;
                     so.old_products = [];
-                    console.log(data.__batchResponses[0].__changeResponses[0])
+                    reloadSalesOrder();
                     showDialog("Sales order created", "Your sales order was successfully submitted!");
                 },
                 function (err) {
@@ -471,7 +470,7 @@ $(function () {
             );
         }
     });
-
+    
     // add new customer
     $("#show-add-customer").click(function () {
         $("#create-new-customer").slideDown();
