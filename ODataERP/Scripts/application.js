@@ -67,13 +67,6 @@ $(function () {
         },
         label: "New Sales Order"
     });
-    $("#order-atp-check").button({
-        disabled: true,
-        icons: {
-            primary: "ui-icon-check"
-        },
-        label: "All available"
-    });
     $("#order-add-item").button({
         icons: {
             primary: "ui-icon-plus"
@@ -160,7 +153,75 @@ $(function () {
     }
     
     function atpCheck() {
-        return true;
+        var delivery_date = $("#order-delivery-date").datepicker( "getDate" );
+        if (delivery_date && !so.id) {
+            OData.request({
+                    requestUri: document.location.href + "ODataERP.svc/SalesOrder?$filter=Status le 1",
+                    method: "GET",
+                    recognizeDates: true
+                },
+                function success(data) {
+                    var atp_so = data.results;
+                    OData.request({
+                            requestUri: document.location.href + "ODataERP.svc/Product",
+                            method: "GET"
+                        },
+                        function success(data) {
+                            var atp_p = data.results;
+                            OData.request({
+                                    requestUri: document.location.href + "ODataERP.svc/ProductForSalesOrder",
+                                    method: "GET"
+                                },
+                                function success(data) {
+                                    var atp_ps = data.results;
+                                    // prepare data
+                                    var products = {}
+                                    for (var i=0; i<atp_p.length; i++) {
+                                        products[atp_p[i].ID] = {quantity: atp_p[i].Stock, date: null}
+                                    }
+                                    for (var i=0; i<atp_so.length; i++) {
+                                        for (var j=0; j<atp_ps.length; j++) {
+                                            if (atp_ps[j].SalesOrderID == atp_so[i].ID) {
+                                                products[atp_ps[j].ProductID].quantity -= atp_ps[j].Quantity;
+                                                if (products[atp_ps[j].ProductID].date < atp_so[i].DeliveryDate) {
+                                                    products[atp_ps[j].ProductID].date = atp_so[i].DeliveryDate;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // check if current so is available
+                                    var earliest_date = null;
+                                    for (var i=0; i<so.products.length; i++) {
+                                        if((products[so.products[i].product.ID].quantity - so.products[i].quantity) <= 0) {
+                                            if (earliest_date < products[so.products[i].product.ID].date) {
+                                                earliest_date = products[so.products[i].product.ID].date;
+                                            }
+                                        }
+                                    }
+                                    if (earliest_date > delivery_date) {
+                                        $("#atp-check").html("Earliest date possible (click!): ");
+                                        $("#atp-check-date").html(usDate(earliest_date));
+                                    }
+                                    else {
+                                        $("#atp-check").html("All available");
+                                        $("#atp-check-date").html("");
+                                    }
+                                }, 
+                                function (err) {
+                                    console.log(err);
+                                }
+                            );
+                        }, 
+                        function (err) {
+                            console.log(err);
+                        }
+                    );
+                }, 
+                function (err) {
+                    console.log(err);
+                }
+            );
+        }
     }
     
     function addItem(product, name, quantity, price) {
@@ -192,6 +253,8 @@ $(function () {
         $("#order-discount").val(0);
         $("#order-shipping").val(0);
         $("#order-delivery-date").datepicker( "setDate" , null );
+        $("#atp-check").html("All available");
+        $("#atp-check-date").html("");
         $(".item-row").remove();
         updateTable();
     }
@@ -212,6 +275,14 @@ $(function () {
             so.old_products.push(prod.results[i].ID);
         }
     }
+    
+    $("#atp-check-date").live("click", function(){
+        if($(this).html() != "All available"){
+            $("#order-delivery-date").datepicker( "setDate" , $(this).html() );
+            $(this).html("");
+            $("#atp-check").html("All available");
+        }
+    });
     
     $(".edit-sales-order").live("click", function(){
         var id = $(this).parent().attr("id");
@@ -358,12 +429,13 @@ $(function () {
 
         // tax
         tax = total_net * discount * tax_prc;
-        $("#order-tax").html(String((tax).toFixed(2)).replace(".", ","))
+        $("#order-tax").html(String((tax).toFixed(2)).replace(".", ","));
 
         // total
         total = total_net * discount + shipping + tax;
-        $("#order-total").html(String((total).toFixed(2)).replace(".", ","))
-
+        $("#order-total").html(String((total).toFixed(2)).replace(".", ","));
+        
+        atpCheck();
     }
 
     $("#order-discount, #order-shipping").change(function () {
@@ -405,6 +477,9 @@ $(function () {
         }
         else if (discount > 100) {
             error = "The discount cannot be more than 100%!";
+        }
+        else if (!($("#atp-check").html() == "All available")) {
+            error = "Products are not available at this time!";
         }
         if (error) {
             showDialog("Error", error);
