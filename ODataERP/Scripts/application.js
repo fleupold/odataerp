@@ -1,20 +1,5 @@
 // init elements
 $(function () {
-    // sales order values
-    var tax_prc = 0.19;
-    var total_net = null;
-    var discount = null;
-    var shipping = null;
-    var tax = null;
-    var total = null;
-
-    so = {
-        customer: null,
-        new_product: null,
-        new_quantity: 1,
-        products: []
-    }
-    
     // helper
     function usDate(dateObject) {
         return dateObject.getMonth() + 1 + "/" + dateObject.getDate() + "/" + dateObject.getFullYear();
@@ -70,11 +55,17 @@ $(function () {
 
     // buttons
     $("button").button();
-    $("#order-create").button({
+    $("#crud-order-button").button({
         icons: {
             primary: "ui-icon-arrowreturnthick-1-e"
         },
         label: "Submit Sales Order"
+    });
+    $("#crud-order-new-button").button({
+        icons: {
+            primary: "ui-icon-arrowreturnthick-1-e"
+        },
+        label: "New Sales Order"
     });
     $("#order-atp-check").button({
         disabled: true,
@@ -139,6 +130,23 @@ $(function () {
     });
     
     // sales order
+    var tax_prc = 0.19;
+    var total_net = null;
+    var discount = null;
+    var discount_perc = 0;
+    var shipping = null;
+    var tax = null;
+    var total = null;
+
+    so = {
+        id: null,
+        customer: null,
+        new_product: null,
+        new_quantity: 1,
+        products: [],
+        old_products:[]
+    }
+    
     function reloadSalesOrder() {
         var url = document.location.href + "ODataERP.svc/SalesOrder?$expand=Customer";
         readMoreData(url, [], redrawSalesOrder);
@@ -151,12 +159,116 @@ $(function () {
         }
     }
     
+    function atpCheck() {
+        return true;
+    }
+    
+    function addItem(product, name, quantity, price) {
+        var num = $(".item-row").length + 1
+        $("#order-item-num").html((num + 1) + ".")
+        so.products.push({ product: product, quantity: quantity });
+        var new_item = '<tr class="item-row"><td class="num"></td><td>' + name + '</td><td>' + quantity + '</td><td>' + price + ' &euro;</td><td><button id="delete_row_' + num + '" class="order-delete-item"></button></td></tr>';
+        $("#order-item-new").before(new_item);
+        $(".order-delete-item").button({
+            icons: {
+                primary: "ui-icon-trash"
+            },
+            label: "Delete"
+        });
+        updateTable();
+    }
+    
+    function resetSalesOrder() {
+        so = {
+            id: null,
+            customer: null,
+            new_product: null,
+            new_quantity: 1,
+            products: [],
+            old_products:[]
+        }
+        $("#customer-name").val("");
+        $("#priority-selection option[value='0']").attr('selected',true);
+        $("#order-discount").val(0);
+        $("#order-shipping").val(0);
+        $("#order-delivery-date").datepicker( "setDate" , null );
+        $(".item-row").remove();
+        updateTable();
+    }
+    
+    function loadSalesOrder(so_data, prod){
+        resetSalesOrder();
+        so.customer = so_data.Customer.ID;
+        so.id = so_data.ID
+        $("#customer-name").val(so_data.Customer.Name);
+        $("#priority-selection option[value='" + so_data.Priority + "']").attr('selected',true);
+        $("#order-discount").val(so_data.Discount);
+        $("#order-shipping").val(so_data.Shipping);
+        $("#order-payment-terms option[value='" + so_data.PaymentTerms + "']").attr('selected',true);
+        $("#order-delivery-date").datepicker( "setDate" , so_data.DeliveryDate );
+        so.old_products = [];
+        for(var i=0; i<prod.results.length; i++) {
+            addItem(prod.results[i].Product, prod.results[i].Product.Name, prod.results[i].Quantity, String((prod.results[i].Quantity*prod.results[i].Product.Price).toFixed(2)).replace(".", ","));
+            so.old_products.push(prod.results[i].ID);
+        }
+    }
+    
+    $(".edit-sales-order").live("click", function(){
+        var id = $(this).parent().attr("id");
+        OData.request({
+                requestUri: document.location.href + "ODataERP.svc/SalesOrder(" + id.substr(12) + ")?$expand=Customer",
+                method: "GET",
+                recognizeDates: true
+            },
+            function success(data) {
+                var so_data = data;
+                OData.request({
+                    requestUri: document.location.href + "ODataERP.svc/SalesOrder(" + id.substr(12) + ")/ProductForSalesOrder?$expand=Product",
+                    method: "GET"
+                    },
+                    function success(data) {
+                        var so_product = data;
+                        loadSalesOrder(so_data, so_product);
+                    },
+                    function (err) {
+                        console.log(err);
+                    }
+                );
+            }, 
+            function (err) {
+                console.log(err);
+            }
+        );
+    });
+    
+    $(".delete-sales-order").live("click", function(){
+        var id = $(this).parent().attr("id");
+        OData.request({
+                requestUri: document.location.href + "ODataERP.svc/SalesOrder(" + id.substr(12) + ")",
+                method: "DELETE"
+            }, 
+            function success(data) {
+                reloadSalesOrder();
+                resetSalesOrder();
+            }, 
+            function (err) {
+                console.log(err);
+            }
+        );
+        $("li[id=" + id + "]").remove();
+    });
+    
+    $("#crud-order-new-button").click(function (){
+        resetSalesOrder();
+    });
+    
     // oder delivery datepicker
     $("#order-delivery-date").datepicker({
         showOn: "button",
         buttonImage: "/Content/images/calendar.gif",
         buttonImageOnly: true,
-        minDate: 0
+        minDate: 0,
+        onSelect: atpCheck
     });
 
     // autocomplete customer name
@@ -178,7 +290,7 @@ $(function () {
         minLength: 1,
         select: function (event, ui) {
             so.customer = ui.item.attributes.ID;
-            $('#order-discount option').eq(ui.item.attributes.Discount).attr('selected', 'selected');
+            $('#order-discount').val(ui.item.attributes.Discount);
         }
     });
 
@@ -232,7 +344,9 @@ $(function () {
         $("#order-net").html(String((total_net).toFixed(2)).replace(".", ","))
 
         // discount
-        discount = 1 - 0.01 * parseInt($("#order-discount").val());
+        var discount_int = parseInt($("#order-discount").val());
+        discount_perc = (discount_int == NaN?0:discount_int);
+        discount = 1 - 0.01 * discount_perc;
 
         // shipping
         shipping = parseFloat($("#order-shipping").val().replace(",", "."));
@@ -255,33 +369,17 @@ $(function () {
     $("#order-discount, #order-shipping").change(function () {
         updateTable();
     });
-
+    
     // add item
     $("#order-add-item").click(function () {
         if (so.new_product) {
-            var num = $(".item-row").length + 1
-            $("#order-item-num").html((num + 1) + ".")
-
             var name = so.new_product.Name;
             var quantity = so.new_quantity;
             var price = $("#order-item-price").html();
-
-            so.products.push({ product: so.new_product, quantity: so.new_quantity });
-
-            var new_item = '<tr class="item-row"><td class="num"></td><td>' + name + '</td><td>' + quantity + '</td><td>' + price + ' &euro;</td><td><button id="delete_row_' + num + '" class="order-delete-item"></button></td></tr>';
-            $("#order-item-new").before(new_item);
-
-            $(".order-delete-item").button({
-                icons: {
-                    primary: "ui-icon-trash"
-                },
-                label: "Delete"
-            });
-
+            addItem(so.new_product, name, quantity, price);
             $("#order-item-name").val("");
             $("#order-item-quantity").html("");
             $("#order-item-price").html("0,00");
-            updateTable()
         }
     });
 
@@ -293,8 +391,8 @@ $(function () {
         updateTable();
     });
 
-    // create sales order
-    $("#order-create").click(function () {
+    // submit sales order
+    $("#crud-order-button").click(function () {
         var error = null;
         if (!so.customer)
             error = "You have to select a customer!";
@@ -302,14 +400,21 @@ $(function () {
             error = "You have to add a product!";
         else if (!$("#order-delivery-date").datepicker("getDate"))
             error = "You have to select a delivery date!";
-
+        else if (discount < 0) {
+            error = "The discount cannot be negative!";
+        }
+        else if (discount > 100) {
+            error = "The discount cannot be more than 100%!";
+        }
         if (error) {
             showDialog("Error", error);
         }
         else {
-            var requestData = { __batchRequests: [{ __changeRequests:
+            // sales order object
+            var requestData = { __batchRequests: 
+                [{ __changeRequests:
                     [
-                        { requestUri: "SalesOrder", method: "POST", headers: { "Content-ID": "1" },
+                        { requestUri: "SalesOrder" + ((so.id)? "(" + so.id + ")":""), method: (so.id?"PUT":"POST"), headers: { "Content-ID": "1" },
                             data: {
                                 CustomerID: so.customer,
                                 DeliveryDate: $("#order-delivery-date").datepicker("getDate"),
@@ -317,18 +422,26 @@ $(function () {
                                 Priority: parseInt($("#priority-selection").val()),
                                 Status: 0,
                                 NetValue: total_net,
-                                Discount: discount,
+                                Discount: discount_perc,
                                 Shipping: shipping,
                                 Tax: tax,
                                 Total: total,
                                 AmountPaid: 0.0,
-                                DunStatus: 0
+                                DunStatus: 0,
+                                Created: new Date(),
+                                Invoiced: null
                             }
                         }
                     ]
-            }]
+                }]
             };
-
+            // delete old product connections
+            if(so.id) {
+                for (var i=0; i<so.old_products.length; i++) {
+                    var requestObject = {requestUri: "ProductForSalesOrder(" + so.old_products[i] + ")", method: "DELETE"};
+                    //requestData.__batchRequests[0].__changeRequests.push(requestObject)
+                }
+            }
             for (var i = 0; i < so.products.length; i++) {
                 var requestObject = {
                     requestUri: "ProductForSalesOrder", method: "POST", data: {
@@ -337,19 +450,22 @@ $(function () {
                         SalesOrderID: { __metadata: { uri: "$1"}}.ID
                     }
                 };
-                requestData.__batchRequests[0].__changeRequests.push(requestObject)
+                //requestData.__batchRequests[0].__changeRequests.push(requestObject)
             }
-
+            console.log(requestData)
             OData.request({
-                requestUri: document.location.href + "ODataERP.svc/$batch",
-                method: "POST",
-                data: requestData
-            },
+                    requestUri: document.location.href + "ODataERP.svc/$batch",
+                    data: requestData,
+                    method: "POST"
+                },
                 function (data) {
-                    showDialog("Sales order created", "Your sales order was successfully created!", function () { window.location.reload() });
+                    so.id = data.id;
+                    so.old_products = [];
+                    console.log(data.__batchResponses[0].__changeResponses[0])
+                    showDialog("Sales order created", "Your sales order was successfully submitted!");
                 },
                 function (err) {
-                    alert(err.message);
+                    console.log(err);
                 },
                 OData.batchHandler
             );
@@ -403,13 +519,13 @@ $(function () {
                   $("#create-new-customer").slideUp();
               },
               function (err) {
-                  alert(err.message);
+                  console.log(err);
               }
             );
         }
     });
 
-    // tables
+    // change status
     function readMoreData(url, arr, cb) {
         OData.read({
             requestUri: url,
@@ -469,7 +585,6 @@ $(function () {
         else if (currentStatus == 3) {
             label = "Complete"
         }
-
         $("#change-button").button({
             icons: {
                 primary: "ui-icon-arrowreturnthick-1-e"
@@ -477,7 +592,6 @@ $(function () {
             label: label,
             disabled: ((currentStatus == 3) ? true : false)
         });
-
         reloadTable();
     });
 
@@ -523,11 +637,9 @@ $(function () {
 
     // dun customer
     var dunTable = $('#dun-table').dataTable();
-
     $('#dun-table tr').live("click", function () {
         $(this).toggleClass('row_selected');
     });
-
     function getDunStatus(obj) {
         if (obj.DunStatus == 2) {
             return "dunned";
@@ -577,7 +689,7 @@ $(function () {
         });
     });
     
-    // CRUD Customer
+    // crud customer
     var customer = {};
     
     function reloadCustomer() {
@@ -686,7 +798,7 @@ $(function () {
         $("#crud-customer-email").val("");
     });
     
-    // CRUD Product
+    // crud product
     var product = {};
     
     function reloadProduct() {
@@ -767,7 +879,7 @@ $(function () {
     $(".delete-product").live("click", function(){
         var id = $(this).parent().attr("id");
         OData.request({
-                requestUri: document.location.href + "ODataERP.svc/Product(" + id.substr(9) + ")",
+                requestUri: document.location.href + "ODataERP.svc/Product(" + id.substr(8) + ")",
                 method: "DELETE"
             }, 
             function success(data) {
@@ -815,10 +927,10 @@ $(function () {
             amount_tot += arr[i].Total;
             sales_order_count += 1;
         }
-        $("#analytics-avg-duration").html(String(Math.round(duration_tot / (1000 * 60 * 60 * 24))/duration_count) + " days");
-        $("#analytics-avg-orders").html((sales_order_count?amount_tot/sales_order_count:0) + "&euro;");
-        $("#analytics-dpp").html(customers.length?dunned/customers.length:0);
-        $("#analytics-dps").html(sales_order_count?dunned/sales_order_count:0);
+        $("#analytics-avg-duration").html((Math.round(duration_tot / (1000 * 60 * 60 * 24))/duration_count).toFixed(2) + " days");
+        $("#analytics-avg-orders").html((sales_order_count?amount_tot/sales_order_count:0).toFixed(2) + "&euro;");
+        $("#analytics-dpp").html((customers.length?dunned/customers.length:0).toFixed(2));
+        $("#analytics-dps").html((sales_order_count?dunned/sales_order_count:0).toFixed(2));
     }
     
     // init

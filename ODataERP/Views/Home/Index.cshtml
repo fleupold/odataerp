@@ -39,18 +39,7 @@
                         </tr>
                         <tr>
                             <td>Discount:</td>
-                            <td>
-                                <select id="new-customer-discount">
-                                    <option value="0" selected="selected">0 &#37;</option>
-                                    <option value="1">1 &#37;</option>
-                                    <option value="2">2 &#37;</option>
-                                    <option value="3">3 &#37;</option>
-                                    <option value="4">4 &#37;</option>
-                                    <option value="5">5 &#37;</option>
-                                    <option value="10">10 &#37;</option>
-                                    <option value="20">20 &#37;</option>
-                                </select>
-                            </td>
+                            <td><input id="new-customer-discount" /> &#37;</td>
                         </tr>
                         <tr>
                             <td>Firstname:</td>
@@ -129,18 +118,7 @@
             </tr>
             <tr>
                 <td>Discount</td>
-                <td>
-                    <select id="order-discount">
-                        <option value="0" selected="selected">0 &#37;</option>
-                        <option value="1">1 &#37;</option>
-                        <option value="2">2 &#37;</option>
-                        <option value="3">3 &#37;</option>
-                        <option value="4">4 &#37;</option>
-                        <option value="5">5 &#37;</option>
-                        <option value="10">10 &#37;</option>
-                        <option value="20">20 &#37;</option>
-                    </select>
-                </td>
+                <td><input type="text" id="order-discount" value="0" /> &#37;</td>
             </tr>
             <tr>
                 <td>Shipping</td>
@@ -182,10 +160,10 @@
                 </td>
             </tr>
         </table>
-        <button id="order-create"></button>
+        <button id="crud-order-new-button"></button><button id="crud-order-button"></button>
     </div>
     <div id="crud-customer-tab">
-       <h2>CRUD Customer</h2>
+       <h2>Customer</h2>
        Customers:
        <ul id="customer-list"></ul>
        <table>
@@ -229,7 +207,7 @@
        <button id="crud-customer-new-button"></button><button id="crud-customer-button"></button>
     </div>
     <div id="crud-product-tab">
-       <h2>CRUD Product</h2>
+       <h2>Product</h2>
        Products:
        <ul id="product-list"></ul>
        <table>
